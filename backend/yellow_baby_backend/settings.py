@@ -3,6 +3,7 @@ Django settings for Yellow Baby Backend.
 Reads sensitive configuration from environment variables (or a .env file).
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 from decouple import config, Csv
@@ -14,6 +15,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-yellow-baby-change-this-in-production')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
+
+# Automatically allow the Render-assigned hostname
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # ─── Application definition ───────────────────────────────────────────────────
 INSTALLED_APPS = [
