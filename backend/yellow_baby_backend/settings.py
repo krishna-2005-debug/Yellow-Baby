@@ -77,22 +77,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'yellow_baby_backend.wsgi.application'
 
 # ─── Database ─────────────────────────────────────────────────────────────────
-# If DATABASE_URL env var is set (Render/Heroku/Railway), use it.
-# Otherwise fall back to MySQL for local development.
+# If DATABASE_URL env var is set AND valid (Render/Heroku/Railway), use it.
+# Otherwise fall back to individual DB settings for local development.
 DATABASE_URL = config('DATABASE_URL', default=None)
 
-if DATABASE_URL:
+_VALID_DB_SCHEMES = ('postgres://', 'postgresql://', 'postgis://', 'mysql://', 'sqlite://')
+
+if DATABASE_URL and any(DATABASE_URL.startswith(s) for s in _VALID_DB_SCHEMES):
     DATABASES = {'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
 else:
     DATABASES = {
         'default': {
-            'ENGINE':   config('DB_ENGINE', default='django.db.backends.postgresql'),
-            'NAME':     config('DB_NAME',   default='yellow_baby'),
-            'USER':     config('DB_USER',   default='yellow_baby_user'),
-            'PASSWORD': config('DB_PASSWORD', default=''),  # WARNING: You still need to set the password in Render!
-            'HOST':     config('DB_HOST',   default='dpg-d7v1uf8g4nts73fevkq0-a'),
-            'PORT':     config('DB_PORT',   default='5432'),
-            'OPTIONS': {},
+            'ENGINE':   config('DB_ENGINE',   default='django.db.backends.postgresql'),
+            'NAME':     config('DB_NAME',     default='yellow_baby'),
+            'USER':     config('DB_USER',     default='yellow_baby_user'),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST':     config('DB_HOST',     default='dpg-d7v1uf8g4nts73fevkq0-a'),
+            'PORT':     config('DB_PORT',     default='5432'),
         }
     }
 
