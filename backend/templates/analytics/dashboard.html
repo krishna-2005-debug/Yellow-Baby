@@ -1,0 +1,408 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Analytics Dashboard | Yellow Baby{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  /* ── Layout ──────────────────────────────────────────── */
+  .yb-page-title {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px;
+  }
+  .yb-page-title h1 { margin: 0; font-size: 22px; color: var(--yb-text); }
+  .yb-badge {
+    background: var(--yb-primary-light); color: var(--yb-primary); font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; letter-spacing: 1px;
+    text-transform: uppercase; border: 1px solid var(--yb-primary);
+  }
+
+  /* ── Stat Cards ──────────────────────────────────────── */
+  .yb-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .yb-stat {
+    border-radius: 14px; padding: 20px;
+    color: var(--yb-text); background: var(--yb-surface);
+    border: 1px solid var(--yb-border);
+    box-shadow: var(--yb-shadow-sm);
+    transition: transform .2s, box-shadow .2s;
+    cursor: default;
+  }
+  .yb-stat:hover { transform: translateY(-4px); box-shadow: var(--yb-shadow); border-color: var(--yb-primary); }
+  .yb-stat .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--yb-text-muted); margin-bottom: 8px; font-weight:700; }
+  .yb-stat .value { font-size: 28px; font-weight: 800; line-height: 1; color: var(--yb-text); }
+  .yb-stat .sub   { font-size: 11px; color: var(--yb-text-muted); margin-top: 6px; }
+  .s1 { border-top: 3px solid #F59E0B; } /* Yellow */
+  .s2 { border-top: 3px solid #D97706; } /* Orange */
+  .s3 { border-top: 3px solid #B45309; } /* Dark Orange */
+  .s4 { border-top: 3px solid #4E3728; } /* Brown */
+  .s5 { border-top: 3px solid #E8DCCB; } /* Light Sandal */
+
+  /* ── Section Titles ──────────────────────────────────── */
+  .yb-section {
+    font-size: 15px; font-weight: 700; color: var(--yb-text);
+    border-left: 4px solid var(--yb-primary); padding-left: 10px;
+    margin: 32px 0 14px;
+  }
+
+  /* ── Chart Cards ─────────────────────────────────────── */
+  .yb-chart-row {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 16px;
+    margin-bottom: 16px;
+  }
+  .yb-chart-row-2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 900px) {
+    .yb-chart-row, .yb-chart-row-2 { grid-template-columns: 1fr; }
+  }
+  .yb-card {
+    background: var(--yb-surface); border-radius: 14px;
+    border: 1px solid var(--yb-border);
+    box-shadow: var(--yb-shadow-sm);
+    overflow: hidden;
+  }
+  .yb-card-header {
+    background: #FDF4E7;
+    color: var(--yb-text); padding: 12px 18px;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid var(--yb-border);
+  }
+  .yb-card-body { padding: 16px; }
+  .yb-canvas-wrap { position: relative; height: 240px; }
+
+  /* ── Tables ──────────────────────────────────────────── */
+  .yb-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .yb-table th {
+    background: #FDF4E7; color: var(--yb-text-muted);
+    padding: 9px 12px; text-align: left;
+    font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    font-weight: 700;
+  }
+  .yb-table td { padding: 9px 12px; border-bottom: 1px solid var(--yb-border); color: var(--yb-text-muted); }
+  .yb-table tr:last-child td { border-bottom: none; }
+  .yb-table tr:hover td { background: var(--yb-surface-hover); }
+  .rank { color: var(--yb-primary); font-weight: 800; font-size: 14px; }
+  .stock-low { color: #D97706; font-weight: 700; }
+  .stock-ok  { color: var(--yb-text-muted); font-weight: 700; }
+  .badge {
+    display: inline-block; padding: 2px 9px; border-radius: 12px;
+    font-size: 10px; font-weight: 700; text-transform: capitalize;
+  }
+  .b-pending   { background:#FEF3C7; color:#92400E; border: 1px solid #FDE68A; }
+  .b-packed    { background:#DBEAFE; color:#1E40AF; border: 1px solid #BFDBFE; }
+  .b-shipped   { background:#E0E7FF; color:#3730A3; border: 1px solid #C7D2FE; }
+  .b-delivered { background:#D1FAE5; color:#065F46; border: 1px solid #A7F3D0; }
+  .b-cancelled { background:#FEE2E2; color:#991B1B; border: 1px solid #FECACA; }
+
+  /* ── Footer ──────────────────────────────────────────── */
+  .yb-footer { text-align: center; color: var(--yb-text-muted); font-size: 11px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--yb-border); }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="/admin/">Home</a> › Analytics Dashboard
+</div>
+{% endblock %}
+
+{% block content %}
+
+{# ── Page Title ───────────────────────────────────────── #}
+<div class="yb-page-title">
+  <h1>📊 Analytics Dashboard</h1>
+  <span class="yb-badge">Live</span>
+</div>
+
+{# ── KPI Cards ────────────────────────────────────────── #}
+<div class="yb-stat-grid">
+  <div class="yb-stat s1">
+    <div class="label">Today's Revenue</div>
+    <div class="value">₹{{ sales.today.total|default:"0" }}</div>
+    <div class="sub">{{ sales.today.count|default:"0" }} orders today</div>
+  </div>
+  <div class="yb-stat s2">
+    <div class="label">This Week</div>
+    <div class="value">₹{{ sales.this_week.total|default:"0" }}</div>
+    <div class="sub">{{ sales.this_week.count|default:"0" }} orders</div>
+  </div>
+  <div class="yb-stat s3">
+    <div class="label">This Month</div>
+    <div class="value">₹{{ sales.this_month.total|default:"0" }}</div>
+    <div class="sub">{{ sales.this_month.count|default:"0" }} orders</div>
+  </div>
+  <div class="yb-stat s4">
+    <div class="label">All-Time Revenue</div>
+    <div class="value">₹{{ sales.all_time.total|default:"0" }}</div>
+    <div class="sub">{{ sales.all_time.count|default:"0" }} total orders</div>
+  </div>
+  <div class="yb-stat s5">
+    <div class="label">Low Stock Alerts</div>
+    <div class="value">{{ low_stock|length }}</div>
+    <div class="sub">variants below 5 units</div>
+  </div>
+</div>
+
+{# ── Charts Row 1: Revenue line + Order Status donut ─── #}
+<p class="yb-section">📈 Sales Trends (Last 14 Days)</p>
+<div class="yb-chart-row">
+
+  <div class="yb-card">
+    <div class="yb-card-header">📅 Daily Revenue</div>
+    <div class="yb-card-body">
+      <div class="yb-canvas-wrap"><canvas id="revenueChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="yb-card">
+    <div class="yb-card-header">🟠 Order Status</div>
+    <div class="yb-card-body">
+      <div class="yb-canvas-wrap"><canvas id="statusChart"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+{# ── Charts Row 2: Top Products bar + Category pie ────── #}
+<p class="yb-section">🏆 Product & Category Performance</p>
+<div class="yb-chart-row-2">
+
+  <div class="yb-card">
+    <div class="yb-card-header">🥇 Top Selling Products (Qty)</div>
+    <div class="yb-card-body">
+      <div class="yb-canvas-wrap"><canvas id="topProductsChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="yb-card">
+    <div class="yb-card-header">🏷️ Revenue by Category</div>
+    <div class="yb-card-body">
+      <div class="yb-canvas-wrap"><canvas id="categoryChart"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+{# ── Detail Tables ────────────────────────────────────── #}
+<div class="yb-chart-row-2">
+
+  {# Top Selling Table #}
+  <div class="yb-card">
+    <div class="yb-card-header">🏆 Top Products — Detail</div>
+    <div class="yb-card-body" style="padding:0;">
+      <table class="yb-table">
+        <thead><tr><th>#</th><th>Product</th><th>Units</th><th>Revenue</th></tr></thead>
+        <tbody>
+          {% for item in top_products %}
+          <tr>
+            <td class="rank">{{ forloop.counter }}</td>
+            <td>{{ item.product_name }}</td>
+            <td><strong>{{ item.total_qty }}</strong></td>
+            <td>₹{{ item.total_revenue }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" style="text-align:center;color:#aaa;padding:20px;">No data yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# Low Stock Table #}
+  <div class="yb-card">
+    <div class="yb-card-header">⚠️ Low Stock — Action Required</div>
+    <div class="yb-card-body" style="padding:0;">
+      <table class="yb-table">
+        <thead><tr><th>Product</th><th>Size</th><th>Stock</th></tr></thead>
+        <tbody>
+          {% for item in low_stock %}
+          <tr>
+            <td>{{ item.product__name }}</td>
+            <td>{{ item.size }}</td>
+            <td>
+              {% if item.stock == 0 %}
+                <span class="stock-low">✗ Out of stock</span>
+              {% else %}
+                <span class="stock-low">⚠ {{ item.stock }} left</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" style="text-align:center;color:#2E8B57;padding:20px;">✓ All products well stocked</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+{# ── Order Status + Category Tables ──────────────────── #}
+<div class="yb-chart-row-2">
+
+  <div class="yb-card">
+    <div class="yb-card-header">📦 Order Status Breakdown</div>
+    <div class="yb-card-body" style="padding:0;">
+      <table class="yb-table">
+        <thead><tr><th>Status</th><th>Count</th></tr></thead>
+        <tbody>
+          {% for row in order_status %}
+          <tr>
+            <td><span class="badge b-{{ row.status }}">{{ row.status }}</span></td>
+            <td><strong>{{ row.count }}</strong></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2" style="text-align:center;color:#aaa;padding:20px;">No orders</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="yb-card">
+    <div class="yb-card-header">🏷️ Category-wise Sales</div>
+    <div class="yb-card-body" style="padding:0;">
+      <table class="yb-table">
+        <thead><tr><th>Category</th><th>Units</th><th>Revenue</th></tr></thead>
+        <tbody>
+          {% for row in category_sales %}
+          <tr>
+            <td>{{ row.category|default:"Uncategorized" }}</td>
+            <td>{{ row.total_qty }}</td>
+            <td>₹{{ row.total_revenue }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" style="text-align:center;color:#aaa;padding:20px;">No data yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="yb-footer">
+  💛 Yellow Baby Admin Analytics &nbsp;|&nbsp; Auto-refreshes when you reload &nbsp;|&nbsp;
+  <a href="/admin/">← Back to Admin Home</a>
+</div>
+
+{# ── Chart.js Scripts ─────────────────────────────────── #}
+<script>
+  const PRIMARY = '#F59E0B'; // Yellow
+  const SLATE = '#D97706';
+  const DARK_GOLD = '#B45309';
+  const DARK_SLATE = '#4E3728';
+  const LIGHT_GOLD = '#E8DCCB';
+  const TEXT = '#4E3728';
+  const BORDER = '#E8DCCB';
+  const SURFACE = '#FFFFFF';
+  const PALETTE = [PRIMARY, SLATE, DARK_GOLD, DARK_SLATE, LIGHT_GOLD, '#8A6B56', '#FCF4EE', '#FFFFFF', '#D97706', '#FFFBEB'];
+
+  // ── Daily Revenue Line Chart ──
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+      labels: {{ daily_labels_json }},
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: {{ daily_revenues_json }},
+        borderColor: PRIMARY,
+        backgroundColor: 'rgba(245, 158, 11, 0.12)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: PRIMARY,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2.5,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ' ₹' + ctx.parsed.y.toLocaleString('en-IN'),
+      }}},
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, color: TEXT }},
+        y: { grid: { color: BORDER }, ticks: {
+          font: { size: 10 }, color: TEXT,
+          callback: v => '₹' + v.toLocaleString('en-IN'),
+        }},
+      }
+    }
+  });
+
+  // ── Order Status Doughnut ──
+  new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: {{ status_labels_json }},
+      datasets: [{
+        data: {{ status_counts_json }},
+        backgroundColor: [PRIMARY, SLATE, DARK_SLATE, DARK_GOLD, LIGHT_GOLD],
+        borderWidth: 2, borderColor: SURFACE,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12, color: TEXT }}},
+    }
+  });
+
+  // ── Top Products Bar Chart ──
+  new Chart(document.getElementById('topProductsChart'), {
+    type: 'bar',
+    data: {
+      labels: {{ top_product_labels_json }},
+      datasets: [{
+        label: 'Units Sold',
+        data: {{ top_product_qty_json }},
+        backgroundColor: PALETTE,
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false }},
+      scales: {
+        x: { grid: { color: BORDER }, ticks: { font: { size: 10 }, color: TEXT }},
+        y: { grid: { display: false }, ticks: { font: { size: 10 }, color: TEXT }},
+      }
+    }
+  });
+
+  // ── Category Revenue Pie Chart ──
+  new Chart(document.getElementById('categoryChart'), {
+    type: 'pie',
+    data: {
+      labels: {{ cat_labels_json }},
+      datasets: [{
+        data: {{ cat_revenue_json }},
+        backgroundColor: PALETTE,
+        borderWidth: 2, borderColor: SURFACE,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10, color: TEXT }},
+        tooltip: { callbacks: {
+          label: ctx => ' ₹' + Number(ctx.parsed).toLocaleString('en-IN'),
+        }}
+      },
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content_title %}<h1>Dashboard</h1>{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .yb-home-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .yb-stat {
+    border-radius: 16px;
+    padding: 24px;
+    color: var(--yb-text);
+    background: var(--yb-surface);
+    border: 1px solid var(--yb-border);
+    box-shadow: var(--yb-shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .yb-stat:hover { 
+    transform: translateY(-4px); 
+    box-shadow: var(--yb-shadow);
+    border-color: var(--yb-primary);
+  }
+  .yb-stat h4 { margin:0 0 8px; font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--yb-text-muted); font-weight:700; }
+  .yb-stat .val { font-size:32px; font-weight:800; margin:0; line-height:1; letter-spacing:-1px; color:var(--yb-text); }
+  .yb-stat .sub { font-size:13px; color:var(--yb-text-muted); margin-top:8px; font-weight:500; }
+  
+  /* Premium subtle accents */
+  .yb-stat.orange { border-top: 3px solid #D4AF37; } /* Gold */
+  .yb-stat.blue   { border-top: 3px solid #94A3B8; } /* Silver */
+  .yb-stat.green  { border-top: 3px solid #B5952F; } /* Dark Gold */
+  .yb-stat.purple { border-top: 3px solid #64748B; } /* Slate */
+  .yb-stat.red    { border-top: 3px solid #E5C35D; } /* Light Gold */
+  .yb-stat.yellow { border-top: 3px solid #CBD5E1; } /* Platinum */
+
+  .yb-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 900px) { .yb-panels { grid-template-columns: 1fr; } }
+
+  .yb-panel {
+    background: var(--yb-surface);
+    border-radius: 16px;
+    border: 1px solid var(--yb-border);
+    overflow: hidden;
+    box-shadow: var(--yb-shadow);
+  }
+  .yb-panel-header {
+    background: #FDF4E7;
+    color: var(--yb-text);
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--yb-border);
+  }
+  .yb-panel table { width:100%; border-collapse:collapse; font-size:13px; color: var(--yb-text); }
+  .yb-panel table td { padding:12px 20px; border-bottom:1px solid var(--yb-border); color: var(--yb-text-muted); }
+  .yb-panel table tr:last-child td { border-bottom:none; }
+  .yb-panel table tr:hover td { background: var(--yb-surface-hover); }
+  .badge {
+    display:inline-block; padding:3px 10px; border-radius:12px;
+    font-size:10px; font-weight:700; text-transform:uppercase;
+  }
+  .b-pending  { background:#FEF3C7; color:#92400E; border: 1px solid #FDE68A; }
+  .b-packed   { background:#DBEAFE; color:#1E40AF; border: 1px solid #BFDBFE; }
+  .b-shipped  { background:#E0E7FF; color:#3730A3; border: 1px solid #C7D2FE; }
+  .b-delivered{ background:#D1FAE5; color:#065F46; border: 1px solid #A7F3D0; }
+  .b-cancelled{ background:#FEE2E2; color:#991B1B; border: 1px solid #FECACA; }
+  .stock-low { color:#D97706; font-weight:700; }
+  .yb-see-all {
+    display:block; text-align:center; padding:12px;
+    font-size:13px; color: var(--yb-primary); text-decoration:none;
+    border-top:1px solid var(--yb-border); font-weight:600;
+    transition: all 0.2s;
+  }
+  .yb-see-all:hover { background: var(--yb-surface-hover); color: var(--yb-primary-dark); }
+  .yb-section-title {
+    font-size:18px; font-weight:800; color: var(--yb-text);
+    border-left:4px solid var(--yb-primary); padding-left:12px;
+    margin:32px 0 16px;
+    letter-spacing:-0.5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+{% load i18n %}
+
+{# ── Inject live stats before the regular app list ── #}
+{% if stats %}
+
+<div class="yb-home-stats">
+  <div class="yb-stat orange">
+    <h4>Today's Revenue</h4>
+    <p class="val">₹{{ stats.sales.today.total|default:"0" }}</p>
+    <p class="sub">{{ stats.sales.today.count|default:"0" }} orders</p>
+  </div>
+  <div class="yb-stat blue">
+    <h4>This Month</h4>
+    <p class="val">₹{{ stats.sales.this_month.total|default:"0" }}</p>
+    <p class="sub">{{ stats.sales.this_month.count|default:"0" }} orders</p>
+  </div>
+  <div class="yb-stat green">
+    <h4>All-Time Revenue</h4>
+    <p class="val">₹{{ stats.sales.all_time.total|default:"0" }}</p>
+    <p class="sub">{{ stats.sales.all_time.count|default:"0" }} orders total</p>
+  </div>
+  <div class="yb-stat purple">
+    <h4>Total Products</h4>
+    <p class="val">{{ stats.total_products }}</p>
+    <p class="sub">{{ stats.active_products }} active</p>
+  </div>
+  <div class="yb-stat red">
+    <h4>Low Stock Alerts</h4>
+    <p class="val">{{ stats.low_stock_count }}</p>
+    <p class="sub">variants below 5 units</p>
+  </div>
+  <div class="yb-stat yellow">
+    <h4>Active Content</h4>
+    <p class="val">{{ stats.content_stats.hero_slides|add:stats.content_stats.categories|add:stats.content_stats.age_groups|add:stats.content_stats.trust_items|add:stats.content_stats.features }}</p>
+    <p class="sub">Homepage Sections</p>
+  </div>
+</div>
+
+<div class="yb-panels">
+
+  {# Recent Orders Panel #}
+  <div class="yb-panel">
+    <div class="yb-panel-header">📦 Recent Orders</div>
+    <table>
+      {% for order in stats.recent_orders %}
+      <tr>
+        <td><strong>#{{ order.id }}</strong></td>
+        <td>{{ order.user__mobile }}</td>
+        <td>₹{{ order.total_amount }}</td>
+        <td><span class="badge b-{{ order.status }}">{{ order.status }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="text-align:center;color:#999;padding:20px;">No orders yet</td></tr>
+      {% endfor %}
+    </table>
+    <a class="yb-see-all" href="/admin/orders/order/">View all orders →</a>
+  </div>
+
+  {# Low Stock Panel #}
+  <div class="yb-panel">
+    <div class="yb-panel-header">⚠️ Low Stock Alerts</div>
+    <table>
+      {% for item in stats.low_stock %}
+      <tr>
+        <td>{{ item.product__name }}</td>
+        <td>{{ item.size }}</td>
+        <td class="stock-low">{{ item.stock }} left</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3" style="text-align:center;color:green;padding:20px;">✓ All stocked well</td></tr>
+      {% endfor %}
+    </table>
+    <a class="yb-see-all" href="/admin/products/productvariant/">Manage stock →</a>
+  </div>
+
+</div>
+
+{% endif %}
+
+{# ── Original app list ── #}
+<p class="yb-section-title">🗂 Manage</p>
+{{ block.super }}
+
+{% endblock %}
