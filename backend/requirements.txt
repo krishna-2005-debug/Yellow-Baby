@@ -14,3 +14,4 @@ dj-database-url==3.1.0
 sqlparse==0.5.3
 tzdata==2025.2
 asgiref==3.11.0
+openpyxl
