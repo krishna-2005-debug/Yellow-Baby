@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'yellow_baby_backend.wsgi.application'
 # Otherwise fall back to individual DB settings for local development.
 DATABASE_URL = config('DATABASE_URL', default=None)
 
-_VALID_DB_SCHEMES = ('postgres://', 'postgresql://', 'postgis://', 'mysql://', 'sqlite://')
+_VALID_DB_SCHEMES = ('postgresql://yellow_baby_user:MVEkQmo35sNGbtGuFJQZcwcfQzylkuXA@dpg-d7v1uf8g4nts73fevkq0-a/yellow_baby')
 
 if DATABASE_URL and any(DATABASE_URL.startswith(s) for s in _VALID_DB_SCHEMES):
     DATABASES = {'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
