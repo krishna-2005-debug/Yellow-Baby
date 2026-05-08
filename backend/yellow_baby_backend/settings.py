@@ -86,16 +86,13 @@ if DATABASE_URL:
 else:
     DATABASES = {
         'default': {
-            'ENGINE':   config('DB_ENGINE', default='django.db.backends.mysql'),
-            'NAME':     config('DB_NAME',   default='yellow_baby_db'),
-            'USER':     config('DB_USER',   default='root'),
-            'PASSWORD': config('DB_PASSWORD', default='1234'),
-            'HOST':     config('DB_HOST',   default='localhost'),
-            'PORT':     config('DB_PORT',   default='3306'),
-            'OPTIONS': {
-                'charset': 'utf8mb4',
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
+            'ENGINE':   config('DB_ENGINE', default='django.db.backends.postgresql'),
+            'NAME':     config('DB_NAME',   default='yellow_baby'),
+            'USER':     config('DB_USER',   default='yellow_baby_user'),
+            'PASSWORD': config('DB_PASSWORD', default=''),  # WARNING: You still need to set the password in Render!
+            'HOST':     config('DB_HOST',   default='dpg-d7v1uf8g4nts73fevkq0-a'),
+            'PORT':     config('DB_PORT',   default='5432'),
+            'OPTIONS': {},
         }
     }
 
