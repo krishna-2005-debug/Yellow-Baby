@@ -1,15 +1,15 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | 🍼 Yellow Baby{% endblock %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Yellow Baby{% endblock %}
 
 {% block branding %}
-<h1 id="site-name" style="display:flex;align-items:center;gap:10px;">
-  <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:8px;color:white;text-decoration:none;">
-    <span style="font-size:28px;">🍼</span>
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:12px;color:white;text-decoration:none;">
+    <div style="width:38px;height:38px;background:linear-gradient(135deg,#F59E0B,#D97706);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(245,158,11,0.4);">🍼</div>
     <div>
-      <div style="font-size:18px;font-weight:800;letter-spacing:-0.3px;">Yellow Baby</div>
-      <div style="font-size:10px;opacity:0.75;font-weight:400;letter-spacing:1px;text-transform:uppercase;">Admin Portal</div>
+      <div style="font-size:17px;font-weight:800;letter-spacing:-0.3px;line-height:1.2;">Yellow Baby</div>
+      <div style="font-size:10px;opacity:0.6;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;">Admin Portal</div>
     </div>
   </a>
 </h1>
@@ -18,251 +18,390 @@
 {% block extrastyle %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ── Brand Colors & Modern Variables (UNCHANGED) ─────────────── */
   :root {
-    --yb-primary: #F59E0B; /* Brand Yellow */
-    --yb-primary-dark: #D97706;
-    --yb-primary-light: rgba(245, 158, 11, 0.15);
-    --yb-text: #4E3728; /* Brown */
-    --yb-text-muted: #8A6B56;
-    --yb-bg: #FCF4EE; /* Sandal */
-    --yb-surface: #FFFFFF;
-    --yb-surface-hover: #FFFBEB;
-    --yb-border: #E8DCCB;
-    --yb-shadow: 0 4px 6px -1px rgba(78, 55, 40, 0.05), 0 2px 4px -1px rgba(78, 55, 40, 0.03);
-    --yb-shadow-lg: 0 10px 15px -3px rgba(78, 55, 40, 0.08), 0 4px 6px -2px rgba(78, 55, 40, 0.04);
+    --p:  #F59E0B;
+    --pd: #D97706;
+    --pl: rgba(245,158,11,0.12);
+    --tx: #1C1917;
+    --tm: #78716C;
+    --bg: #F5F5F4;
+    --sf: #FFFFFF;
+    --sh: #FAFAF9;
+    --bd: #E7E5E4;
+    --hd: #292524;
+    --rad: 10px;
+    --s1: 0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+    --s2: 0 4px 6px -1px rgba(0,0,0,0.07),0 2px 4px -1px rgba(0,0,0,0.04);
+    --s3: 0 10px 15px -3px rgba(0,0,0,0.08),0 4px 6px -2px rgba(0,0,0,0.04);
   }
 
-  body { 
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important; 
-    background-color: var(--yb-bg) !important;
-    color: var(--yb-text) !important;
-    line-height: 1.6;
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    background: var(--bg) !important;
+    color: var(--tx) !important;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
-  /* ── Header (Glassmorphism & Refined Spacing) ────────────── */
+  /* ── HEADER ── */
   #header {
-    background: #4E3728 !important; /* Brown Header */
-    padding: 12px 32px;
-    border-bottom: 2px solid var(--yb-primary);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-  #header a:link, #header a:visited { color: #FCF4EE; }
-  #branding h1 { color: #FCF4EE; margin: 0; }
-
-  /* ── Quick Nav Bar (Pill style) ────────────────────────── */
-  .yb-quicknav {
-    background: var(--yb-surface);
+    background: var(--hd) !important;
+    padding: 0 28px !important;
+    height: 60px;
     display: flex;
-    gap: 8px;
     align-items: center;
-    padding: 16px 32px;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--yb-border);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
-  .yb-quicknav a {
-    color: var(--yb-text) !important;
+  #branding { display: flex; align-items: center; }
+  #branding h1 { margin: 0; padding: 0; }
+  #user-tools { margin: 0 0 0 auto; font-size: 13px; }
+  #user-tools a { color: rgba(255,255,255,0.7) !important; text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  #user-tools a:hover { color: #fff !important; }
+
+  /* ── QUICK NAV ── */
+  .yb-nav {
+    background: var(--sf);
+    border-bottom: 1px solid var(--bd);
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 46px;
+    box-shadow: var(--s1);
+  }
+  .yb-nav a {
+    color: var(--tm) !important;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     padding: 6px 14px;
-    border-radius: 9999px; /* Full pill shape */
-    background: var(--yb-bg);
-    border: 1px solid var(--yb-border);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
   }
-  .yb-quicknav a:hover { 
-    background: var(--yb-primary); 
-    border-color: var(--yb-primary); 
-    color: white !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
-  }
+  .yb-nav a:hover { background: var(--pl); color: var(--pd) !important; }
+  .yb-nav .sep { color: var(--bd); margin: 0 4px; font-size: 18px; }
 
-  /* ── Sidebar & Layout (Card based) ───────────────────────── */
-  #nav-sidebar { 
-    border-right: 1px solid var(--yb-border); 
-    background: var(--yb-bg); 
-    padding-top: 16px;
+  /* ── SIDEBAR ── */
+  #nav-sidebar {
+    background: var(--sf);
+    border-right: 1px solid var(--bd);
+    min-width: 220px;
   }
-  .module {
-    background: var(--yb-surface) !important;
-    border-radius: 12px !important;
-    border: 1px solid var(--yb-border) !important;
-    box-shadow: var(--yb-shadow) !important;
-    overflow: hidden;
-    margin-bottom: 24px;
-    transition: box-shadow 0.3s ease;
+  #nav-sidebar .module {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0;
+    padding: 8px 12px;
   }
-  .module:hover {
-    box-shadow: var(--yb-shadow-lg) !important;
+  #nav-sidebar .module caption, #nav-sidebar .module h2 {
+    background: transparent !important;
+    border: none !important;
+    color: var(--tm) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.2px !important;
+    text-transform: uppercase !important;
+    padding: 12px 8px 6px !important;
   }
-  .module caption, .module h2 { 
-    background: var(--yb-surface) !important; 
-    color: var(--yb-text) !important;
-    border-bottom: 1px solid var(--yb-border);
-    font-weight: 800;
-    font-size: 14px;
-    padding: 16px 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .module caption a, .module h2 a {
-    color: var(--yb-text) !important;
-  }
-
-  /* ── Buttons (Flat & Modern) ───────────────────────────── */
-  .button, input[type=submit], input[type=button], .submit-row input,
-  a.button, .object-tools a {
-    background: var(--yb-primary) !important;
-    border: 1px solid var(--yb-primary-dark) !important;
-    color: white !important;
-    border-radius: 6px !important;
-    font-weight: 600;
-    padding: 8px 16px;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 12px;
-  }
-  .button:hover, input[type=submit]:hover, .object-tools a:hover { 
-    background: var(--yb-primary-dark) !important; 
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(217, 119, 6, 0.2);
-  }
-
-  /* ── Links ───────────────────────────────── */
-  a:link, a:visited { color: var(--yb-primary-dark); text-decoration: none; transition: all 0.2s; }
-  a:hover { color: #B45309; text-decoration: none; opacity: 0.8; }
-  
-  #nav-sidebar .addlink, #nav-sidebar .changelink {
-    color: var(--yb-text) !important;
-    font-weight: 600;
-    font-size: 13px;
-    border-radius: 4px;
-    padding: 4px 8px;
-  }
-  #nav-sidebar .addlink:hover, #nav-sidebar .changelink:hover {
-    background: var(--yb-primary-light);
-    color: var(--yb-primary-dark) !important;
-  }
-
-  /* ── Breadcrumbs ─────────────────────────── */
-  div.breadcrumbs { 
-    background: transparent; 
-    border-bottom: none; 
-    color: var(--yb-text-muted); 
-    padding: 20px 40px;
+  #nav-sidebar .module th { padding: 0; border: none; }
+  #nav-sidebar .module td { padding: 1px 0; border: none; }
+  #nav-sidebar .addlink, #nav-sidebar .changelink, #nav-sidebar .viewlink {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: var(--tx) !important;
     font-size: 13px;
     font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s;
   }
-  div.breadcrumbs a { 
-    color: var(--yb-primary-dark); 
-    font-weight: 600; 
-    background: var(--yb-primary-light);
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-  div.breadcrumbs a:hover {
-    background: var(--yb-primary);
-    color: white;
+  #nav-sidebar .addlink:hover, #nav-sidebar .changelink:hover, #nav-sidebar .viewlink:hover {
+    background: var(--pl);
+    color: var(--pd) !important;
   }
 
-  /* ── Tables & Rows (Spacious) ────────────── */
-  #changelist table { border: none !important; color: var(--yb-text); }
-  #changelist table thead th {
-    background: var(--yb-bg) !important;
-    color: var(--yb-text-muted);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid var(--yb-border);
-    padding: 16px 12px;
+  /* ── MAIN MODULES ── */
+  .module {
+    background: var(--sf) !important;
+    border-radius: var(--rad) !important;
+    border: 1px solid var(--bd) !important;
+    box-shadow: var(--s1) !important;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: box-shadow 0.2s;
   }
+  .module:hover { box-shadow: var(--s2) !important; }
+  .module caption, .module > h2 {
+    background: var(--sh) !important;
+    color: var(--tx) !important;
+    border-bottom: 1px solid var(--bd) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    padding: 14px 18px !important;
+  }
+  .module caption a, .module > h2 a { color: var(--tx) !important; }
+
+  /* ── CONTENT AREA ── */
+  #content { padding: 24px 28px !important; }
+  #content h1 { font-size: 22px; font-weight: 800; color: var(--tx); letter-spacing: -0.5px; margin: 0 0 20px; }
+  .dashboard #content { max-width: 100%; }
+  #content-main { flex: 1; min-width: 0; }
+
+  /* ── BREADCRUMBS ── */
+  div.breadcrumbs {
+    background: var(--sf) !important;
+    border-bottom: 1px solid var(--bd) !important;
+    padding: 10px 28px !important;
+    font-size: 12px;
+    color: var(--tm);
+  }
+  div.breadcrumbs a { color: var(--pd) !important; font-weight: 500; text-decoration: none; }
+  div.breadcrumbs a:hover { text-decoration: underline; }
+
+  /* ── BUTTONS ── */
+  .button, input[type=submit], input[type=button], .submit-row input, a.button, .object-tools a {
+    background: var(--p) !important;
+    border: 1px solid var(--pd) !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    transition: all 0.15s !important;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .button:hover, input[type=submit]:hover, .object-tools a:hover {
+    background: var(--pd) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(217,119,6,0.25) !important;
+  }
+  .button.default, input[type=submit].default { box-shadow: 0 2px 6px rgba(245,158,11,0.3) !important; }
+  .deletelink, a.deletelink { background: #EF4444 !important; border-color: #DC2626 !important; }
+  .deletelink:hover { background: #DC2626 !important; }
+
+  /* ── LINKS ── */
+  a:link, a:visited { color: var(--pd); text-decoration: none; transition: color 0.15s; }
+  a:hover { color: #B45309; }
+
+  /* ── TABLES ── */
+  #changelist table { border-collapse: collapse; width: 100%; }
+  #changelist table thead th {
+    background: var(--sh) !important;
+    color: var(--tm) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid var(--bd) !important;
+    white-space: nowrap;
+  }
+  #changelist table thead th a { color: var(--tm) !important; }
   #changelist table tbody td, #changelist table tbody th {
-    border-bottom: 1px solid var(--yb-border);
-    padding: 16px 12px;
+    padding: 13px 16px !important;
+    border-bottom: 1px solid var(--bd) !important;
     vertical-align: middle;
     font-size: 13px;
   }
+  #changelist table tbody tr:last-child td { border-bottom: none !important; }
   #changelist table tbody tr:hover td, #changelist table tbody tr:hover th {
-    background: var(--yb-surface-hover) !important;
+    background: var(--sh) !important;
   }
-  tr.selected td, tr.selected th { background: var(--yb-primary-light) !important; }
-  .selected { background-color: var(--yb-primary-light) !important; }
+  tr.selected td, tr.selected th { background: var(--pl) !important; }
+  #changelist table input[type=checkbox] { accent-color: var(--p); width: 15px; height: 15px; }
+  #result_list { margin-bottom: 0; }
 
-  /* ── Forms (Minimal) ─────────────────────── */
-  input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], textarea, select {
-    background: var(--yb-surface) !important;
-    border: 1px solid var(--yb-border) !important;
-    color: var(--yb-text) !important;
-    border-radius: 6px !important;
-    padding: 10px 12px !important;
-    font-size: 14px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
-    transition: border-color 0.2s, box-shadow 0.2s;
+  /* ── SEARCH & FILTERS ── */
+  #changelist-search { margin-bottom: 12px; }
+  #searchbar {
+    background: var(--sf) !important;
+    border: 1px solid var(--bd) !important;
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    color: var(--tx) !important;
+    width: 280px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
-  input[type=text]:focus, textarea:focus, select:focus { 
-    border-color: var(--yb-primary) !important; 
-    box-shadow: 0 0 0 3px var(--yb-primary-light) !important;
-    outline: none; 
-  }
-
-  /* ── Paginator ───────────────────────────── */
-  .paginator { 
-    border-top: 1px solid var(--yb-border) !important; 
-    background: var(--yb-surface) !important;
-    padding: 16px !important;
-    color: var(--yb-text-muted);
-    font-size: 13px;
-    border-radius: 0 0 12px 12px;
-  }
-  .paginator a.this-page { 
-    background: var(--yb-primary); 
-    color: white; 
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-weight: bold;
-  }
-
-  /* ── Misc ────────────────────────────────── */
-  .dashboard #content { max-width: 1400px; padding: 24px 40px; }
+  #searchbar:focus { border-color: var(--p) !important; box-shadow: 0 0 0 3px var(--pl) !important; }
   #changelist-filter {
-    background: var(--yb-surface) !important;
-    border: 1px solid var(--yb-border) !important;
-    border-radius: 12px;
-    box-shadow: var(--yb-shadow);
-    margin-left: 20px;
+    background: var(--sf) !important;
+    border: 1px solid var(--bd) !important;
+    border-radius: var(--rad) !important;
+    box-shadow: var(--s1) !important;
+    margin-left: 24px !important;
+    min-width: 200px;
   }
-  #changelist-filter h2 { 
-    background: var(--yb-bg) !important; 
-    color: var(--yb-text) !important;
-    border-bottom: 1px solid var(--yb-border);
-    border-radius: 12px 12px 0 0;
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 12px 16px;
+  #changelist-filter h2 {
+    background: var(--sh) !important;
+    color: var(--tm) !important;
+    border-bottom: 1px solid var(--bd) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    padding: 12px 16px !important;
+    border-radius: var(--rad) var(--rad) 0 0 !important;
   }
-  #changelist-filter li.selected a { 
-    color: var(--yb-primary-dark); 
-    font-weight: 700; 
-    background: var(--yb-primary-light); 
-    border-left: 3px solid var(--yb-primary); 
+  #changelist-filter h3 { font-size: 11px; color: var(--tm); padding: 10px 16px 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  #changelist-filter li { padding: 0; }
+  #changelist-filter li a { display: block; padding: 6px 16px; color: var(--tm) !important; font-size: 13px; transition: all 0.15s; }
+  #changelist-filter li a:hover { background: var(--sh); color: var(--tx) !important; }
+  #changelist-filter li.selected a { color: var(--pd) !important; font-weight: 600; background: var(--pl); border-left: 3px solid var(--p); }
+
+  /* ── FORMS ── */
+  .form-row { padding: 14px 18px !important; border-bottom: 1px solid var(--bd) !important; }
+  .form-row:last-child { border-bottom: none !important; }
+  label { font-weight: 600; font-size: 13px; color: var(--tx); }
+  .help { color: var(--tm); font-size: 12px; margin-top: 4px; }
+
+  input[type=text], input[type=password], input[type=email], input[type=url],
+  input[type=number], input[type=tel], textarea, select {
+    background: var(--sf) !important;
+    border: 1px solid var(--bd) !important;
+    border-radius: 7px !important;
+    color: var(--tx) !important;
+    font-size: 14px !important;
+    padding: 9px 13px !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--p) !important;
+    box-shadow: 0 0 0 3px var(--pl) !important;
+  }
+  .submit-row {
+    background: var(--sh) !important;
+    border-top: 1px solid var(--bd) !important;
+    padding: 14px 18px !important;
+    border-radius: 0 0 var(--rad) var(--rad);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  /* ── PAGINATOR ── */
+  .paginator {
+    background: var(--sf) !important;
+    border-top: 1px solid var(--bd) !important;
+    padding: 14px 18px !important;
+    font-size: 13px;
+    color: var(--tm);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .paginator a, .paginator .this-page {
+    padding: 5px 11px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .paginator a { color: var(--pd) !important; border: 1px solid var(--bd); background: var(--sf); }
+  .paginator a:hover { background: var(--p); color: white !important; border-color: var(--p); }
+  .paginator .this-page { background: var(--p) !important; color: white !important; border: 1px solid var(--pd); }
+
+  /* ── MESSAGES ── */
+  .messagelist { margin: 0 0 16px; padding: 0; list-style: none; }
+  .messagelist li {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .messagelist li.success { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+  .messagelist li.warning { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+  .messagelist li.error   { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+
+  /* ── OBJECT TOOLS ── */
+  .object-tools { float: right; margin: 0 0 12px; display: flex; gap: 8px; }
+  .object-tools li { list-style: none; }
+
+  /* ── INLINE FIELDSETS ── */
+  .inline-group {
+    background: var(--sf);
+    border: 1px solid var(--bd);
+    border-radius: var(--rad);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--s1);
+  }
+  .inline-group h2 {
+    background: var(--sh) !important;
+    border-bottom: 1px solid var(--bd);
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    padding: 13px 18px !important;
+    color: var(--tx) !important;
+  }
+  fieldset.module { border-radius: var(--rad) !important; }
+  fieldset.module h2 { font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.8px !important; }
+
+  /* ── MISC ── */
+  #action-bar { background: var(--sf); border-bottom: 1px solid var(--bd); padding: 10px 18px; display: flex; align-items: center; gap: 12px; }
+  select[name=action] { border-radius: 6px !important; padding: 7px 10px !important; font-size: 13px !important; }
+  .actions { background: var(--sh); border-bottom: 1px solid var(--bd); padding: 10px 18px; display: flex; align-items: center; gap: 10px; }
+  #changelist-form .actions label { font-weight: 500; }
+  .errornote { background: #FEF2F2 !important; color: #991B1B !important; border: 1px solid #FECACA !important; border-radius: 8px !important; padding: 12px 18px !important; font-size: 13px; }
+  .errorlist { color: #DC2626; font-size: 12px; margin: 4px 0 0; }
+  .errorlist li { list-style: none; }
+  a.viewsitelink { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8) !important; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 500; border: 1px solid rgba(255,255,255,0.1); }
+  a.viewsitelink:hover { background: rgba(255,255,255,0.2); color: white !important; }
+  #content-related { min-width: 220px; }
+  .related-widget-wrapper { display: flex; align-items: center; gap: 8px; }
+  .related-widget-wrapper-link { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; background: var(--pl); color: var(--pd); font-size: 14px; text-decoration: none; border: 1px solid var(--bd); transition: all 0.15s; }
+  .related-widget-wrapper-link:hover { background: var(--p); color: white; }
+  
+  /* ── CALENDAR / DATETIME ── */
+  .calendarbox { border-radius: 10px !important; box-shadow: var(--s3) !important; border: 1px solid var(--bd) !important; overflow: hidden; }
+  .calendar caption { background: var(--hd) !important; color: white !important; padding: 10px !important; }
+  .timelist { border: 1px solid var(--bd) !important; border-radius: 8px !important; }
+
+  @media (max-width: 767px) {
+    #header { padding: 0 16px !important; }
+    .yb-nav { padding: 0 16px; }
+    #content { padding: 16px !important; }
+    div.breadcrumbs { padding: 10px 16px !important; }
   }
 </style>
 {% endblock %}
 
 {% block usertools %}
-<div class="yb-quicknav">
-  <a href="/admin/">🏠 Home</a>
-  <a href="/admin/analytics/">📊 Analytics</a>
+<div class="yb-nav">
+  <a href="/admin/">🏠 Dashboard</a>
+  <span class="sep">|</span>
   <a href="/admin/orders/order/">📦 Orders</a>
   <a href="/admin/products/product/">🛍 Products</a>
   <a href="/admin/users/user/">👥 Users</a>
   <a href="/admin/content/">🎨 Content</a>
-  <a href="/api/products/" target="_blank">🔗 API</a>
+  <a href="/admin/analytics/" style="margin-left:4px;">📊 Analytics</a>
+  <a href="/api/products/" target="_blank" style="margin-left:auto;opacity:0.6;font-size:12px;">↗ API</a>
 </div>
 {{ block.super }}
 {% endblock %}
