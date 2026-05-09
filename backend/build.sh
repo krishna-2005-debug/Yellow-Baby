@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
-set -e  # Exit on any error
+set -e
 
-echo "==> Installing dependencies..."
+echo "==> [1/5] Installing dependencies..."
 pip install -r requirements.txt
 
-echo "==> Running database migrations..."
+echo "==> [2/5] Running database migrations..."
 python manage.py migrate --noinput
 
-echo "==> Collecting static files..."
-python manage.py collectstatic --noinput
+echo "==> [3/5] Collecting static files..."
+mkdir -p staticfiles
+python manage.py collectstatic --noinput --clear
 
-echo "==> Creating superuser (if not exists)..."
+echo "==> [4/5] Creating superuser (if not exists)..."
 python manage.py ensure_superuser
 
-echo "==> Build complete!"
+echo "==> [5/5] Build complete!"
