@@ -1,1 +1,1 @@
-web: cd backend && python manage.py migrate --noinput && python manage.py collectstatic --noinput --clear && python manage.py ensure_superuser && gunicorn yellow_baby_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+web: cd backend && mkdir -p staticfiles && python manage.py migrate --noinput && python manage.py collectstatic --noinput && python manage.py ensure_superuser && gunicorn yellow_baby_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
