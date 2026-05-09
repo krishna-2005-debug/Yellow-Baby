@@ -158,15 +158,20 @@ SIMPLE_JWT = {
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
 CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=True, cast=bool)
+
+_frontend_url = config('FRONTEND_URL', default='http://localhost:5173').rstrip('/')
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok-free.dev',
     'https://*.ngrok-free.app',
+    'https://*.vercel.app',
     'http://localhost:5173',
     'http://127.0.0.1:5173',
-    config('FRONTEND_URL', default='http://localhost:5173'),
+    _frontend_url,
 ]
 
 # ─── OTP Settings ─────────────────────────────────────────────────────────────
 OTP_EXPIRY_MINUTES = config('OTP_EXPIRY_MINUTES', default=10, cast=int)
+# Keep OTP_DEV_BYPASS=True until you configure a real SMS provider
 OTP_DEV_BYPASS    = config('OTP_DEV_BYPASS', default=True, cast=bool)
 OTP_DEV_CODE      = config('OTP_DEV_CODE', default='123456')
+
