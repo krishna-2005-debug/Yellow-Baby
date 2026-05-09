@@ -5,6 +5,22 @@ import traceback
 def health(request):
     return JsonResponse({"status": "ok"})
 
+def api_root(request):
+    return JsonResponse({
+        "name": "Yellow Baby API",
+        "status": "running",
+        "version": "1.0.0",
+        "endpoints": {
+            "admin":    "/admin/",
+            "health":   "/health/",
+            "products": "/api/products/",
+            "users":    "/api/users/",
+            "cart":     "/api/cart/",
+            "orders":   "/api/orders/",
+            "content":  "/api/content/",
+        }
+    })
+
 def debug_info(request):
     """Temporary endpoint to diagnose 500 errors in production."""
     try:

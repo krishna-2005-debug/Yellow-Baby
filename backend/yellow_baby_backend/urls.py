@@ -7,9 +7,10 @@ from django.conf.urls.static import static
 # ── Custom Admin Site ──────────────────────────────────────────────────────────
 from yellow_baby_backend.admin_site import yellow_baby_admin
 from analytics.views import analytics_dashboard
-from .views import health, debug_info
+from .views import health, debug_info, api_root
 
 urlpatterns = [
+    path('', api_root),   # Root URL — shows API info
     # Analytics dashboard MUST come before admin/ so it isn't swallowed
     path('admin/analytics/', analytics_dashboard, name='analytics-dashboard'),
     path('admin/', yellow_baby_admin.urls),
