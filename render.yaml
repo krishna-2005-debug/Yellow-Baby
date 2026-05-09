@@ -3,7 +3,7 @@ services:
     name: yellow-baby-backend
     env: python
     rootDir: backend
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput
+    buildCommand: bash build.sh
     startCommand: gunicorn yellow_baby_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
     envVars:
       - key: SECRET_KEY
@@ -11,11 +11,17 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        value: "yellow-baby-backend.onrender.com"
+        value: "yellow-baby.onrender.com"
       - key: CORS_ALLOW_ALL_ORIGINS
         value: "True"
       - key: OTP_DEV_BYPASS
         value: "False"
+      - key: DJANGO_SUPERUSER_PHONE
+        value: "9999999999"          # ← Change this in Render dashboard!
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: "Admin@1234"          # ← Change this in Render dashboard!
+      - key: DJANGO_SUPERUSER_NAME
+        value: "Admin"
       - key: DATABASE_URL
         fromDatabase:
           name: yellow-baby-db
