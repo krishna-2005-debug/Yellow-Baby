@@ -3,7 +3,7 @@ services:
     name: yellow-baby-backend
     env: python
     rootDir: backend
-    buildCommand: bash build.sh
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
     startCommand: gunicorn yellow_baby_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
     envVars:
       - key: SECRET_KEY
