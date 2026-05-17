@@ -5,11 +5,11 @@
 
 {% block branding %}
 <h1 id="site-name">
-  <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:10px;color:white;text-decoration:none;">
+  <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:10px;color:var(--tx);text-decoration:none;">
     <div style="width:32px;height:32px;background:linear-gradient(135deg,#F59E0B,#D97706);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">🍼</div>
     <div style="line-height:1.1;">
       <div style="font-size:15px;font-weight:800;letter-spacing:-0.3px;">Yellow Baby</div>
-      <div style="font-size:9px;opacity:0.5;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;">Admin Portal</div>
+      <div style="font-size:9px;color:var(--tm);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;">Admin Portal</div>
     </div>
   </a>
 </h1>
@@ -25,15 +25,15 @@
     --p:   #F59E0B;
     --pd:  #D97706;
     --pl:  rgba(245,158,11,0.1);
-    --tx:  #1C1917;
-    --tm:  #78716C;
-    --ts:  #A8A29E;
-    --bg:  #F2F2F0;
+    --tx:  #111827;
+    --tm:  #6B7280;
+    --ts:  #9CA3AF;
+    --bg:  #F0F2F5;
     --sf:  #FFFFFF;
-    --sh:  #FAFAF9;
-    --bd:  #E7E5E4;
-    --hd:  #1C1917;
-    --r:   8px;
+    --sh:  #F9FAFB;
+    --bd:  #E5E7EB;
+    --hd:  #FFFFFF;
+    --r:   10px;
     --s0:  0 1px 2px rgba(0,0,0,0.04);
     --s1:  0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
     --s2:  0 4px 6px -1px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.04);
@@ -47,7 +47,7 @@
       --body-fg: var(--tx) !important;
       --body-quiet-color: var(--tm) !important;
       --header-bg: var(--hd) !important;
-      --header-color: #fff !important;
+      --header-color: var(--tx) !important;
       --breadcrumbs-bg: var(--sf) !important;
       --breadcrumbs-fg: var(--ts) !important;
       --breadcrumbs-link-fg: var(--pd) !important;
@@ -85,12 +85,12 @@
   #header {
     background:var(--hd) !important;
     padding:0 24px !important;
-    height:52px;
+    height:60px;
     display:flex;
     align-items:center;
     gap:0;
-    border-bottom:1px solid rgba(255,255,255,0.05);
-    box-shadow:0 1px 0 rgba(0,0,0,0.3);
+    border-bottom:1px solid var(--bd);
+    box-shadow:none;
     position:sticky;
     top:0;
     z-index:999;
@@ -107,29 +107,29 @@
     flex:1;
   }
   .yb-nav a {
-    color:rgba(255,255,255,0.6) !important;
+    color:var(--tm) !important;
     text-decoration:none;
     font-size:13px;
-    font-weight:500;
-    padding:5px 12px;
+    font-weight:600;
+    padding:6px 14px;
     border-radius:6px;
     transition:all 0.15s;
     white-space:nowrap;
   }
-  .yb-nav a:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.95) !important;}
-  .yb-nav .yb-divider{width:1px;height:16px;background:rgba(255,255,255,0.1);margin:0 4px;}
-  .yb-nav .yb-api-link{margin-left:auto;font-size:11px;opacity:0.4;}
+  .yb-nav a:hover{background:var(--sh);color:var(--tx) !important;}
+  .yb-nav .yb-divider{width:1px;height:16px;background:var(--bd);margin:0 4px;}
+  .yb-nav .yb-api-link{margin-left:auto;font-size:11px;color:var(--ts);}
 
   /* ── USER TOOLS ── */
   #user-tools{
     margin:0 0 0 auto;
-    font-size:12px;
-    color:rgba(255,255,255,0.5) !important;
+    font-size:12.5px;
+    color:var(--tm) !important;
     flex-shrink:0;
   }
-  #user-tools a{color:rgba(255,255,255,0.55) !important;text-decoration:none;font-weight:500;transition:color 0.15s;}
-  #user-tools a:hover{color:rgba(255,255,255,0.9) !important;}
-  #user-tools strong{color:rgba(255,255,255,0.8);font-weight:600;}
+  #user-tools a{color:var(--p) !important;text-decoration:none;font-weight:600;transition:color 0.15s;}
+  #user-tools a:hover{color:var(--pd) !important;}
+  #user-tools strong{color:var(--tx);font-weight:700;}
 
   /* ── BREADCRUMBS ── */
   div.breadcrumbs {
