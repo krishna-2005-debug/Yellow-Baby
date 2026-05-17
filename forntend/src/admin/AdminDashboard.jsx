@@ -87,10 +87,26 @@ export default function AdminDashboard() {
     if (!quiet) setLoading(true);
     else setRefreshing(true);
     try {
-      const { data } = await api.get('/api/analytics/dashboard/');
-      setStats(data);
+      const { data } = await api.get('/api/orders/admin/dashboard/');
+      // Map API response to component shape
+      setStats({
+        sales: {
+          today:      { total: data.kpis.today_revenue,  count: data.kpis.today_orders },
+          this_month: { total: data.kpis.month_revenue,  count: data.kpis.month_orders },
+          all_time:   { total: data.kpis.all_revenue,    count: data.kpis.all_orders },
+        },
+        total_products:   data.kpis.products,
+        active_products:  data.kpis.active_products,
+        low_stock_count:  data.kpis.low_stock,
+        total_users:      data.kpis.customers,
+        new_users_week:   data.kpis.new_customers_week,
+        daily_revenue:    data.revenue_chart.map(d => ({ label: d.day, value: d.revenue })),
+        order_status_counts: data.order_status,
+        recent_orders:    data.recent_orders,
+        low_stock:        data.low_stock_products,
+      });
     } catch {
-      // Use demo data if API not available
+      // Fallback to demo data when backend is offline
       setStats(DEMO_STATS);
     } finally {
       setLoading(false);

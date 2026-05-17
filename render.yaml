@@ -26,6 +26,14 @@ services:
         fromDatabase:
           name: yellow-baby-db
           property: connectionString
+      # ── Payment Gateway (Razorpay) ──────────────────────────────────
+      - key: RAZORPAY_KEY_ID
+        value: ""        # ⚠ Set in Render dashboard
+      - key: RAZORPAY_KEY_SECRET
+        value: ""        # ⚠ Set in Render dashboard
+      # ── SMS Gateway (Fast2SMS) ──────────────────────────────────────
+      - key: FAST2SMS_API_KEY
+        value: ""        # ⚠ Set in Render dashboard
 
 databases:
   - name: yellow-baby-db

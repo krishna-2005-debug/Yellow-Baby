@@ -173,6 +173,23 @@ OTP_EXPIRY_MINUTES = config('OTP_EXPIRY_MINUTES', default=10, cast=int)
 OTP_DEV_BYPASS    = config('OTP_DEV_BYPASS', default=False, cast=bool)  # ← Safe default
 OTP_DEV_CODE      = config('OTP_DEV_CODE', default='123456')
 
+# ─── SMS (Fast2SMS) ──────────────────────────────────────────────────────────────────────────
+FAST2SMS_API_KEY  = config('FAST2SMS_API_KEY', default='')
+
+# ─── Razorpay ─────────────────────────────────────────────────────────────────────────────
+RAZORPAY_KEY_ID     = config('RAZORPAY_KEY_ID',     default='')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
+
+# ─── Rate Limiting ─────────────────────────────────────────────────────────────────────────
+RATELIMIT_USE_CACHE = 'default'  # uses Django's cache backend
+
+# ─── Cache (for rate limiting) ─────────────────────────────────────────────────────────────────
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 # ─── Production Security Headers ──────────────────────────────────────────────
 if not DEBUG:
     SECURE_HSTS_SECONDS        = 31536000

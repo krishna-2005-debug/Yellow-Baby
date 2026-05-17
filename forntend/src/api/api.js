@@ -80,12 +80,24 @@ export const getInvoiceUrl  = (id) => `${BASE_URL}/api/orders/${id}/invoice/`;
 // Public endpoints — no auth needed
 const publicApi = axios.create({ baseURL: BASE_URL });
 
-export const getAllContent     = () => publicApi.get('/api/content/');
-export const getHeroSlides     = () => publicApi.get('/api/content/hero-slides/');
-export const getQuickCategories= () => publicApi.get('/api/content/quick-categories/');
-export const getAgeGroups      = () => publicApi.get('/api/content/age-groups/');
-export const getTrustItems     = () => publicApi.get('/api/content/trust-items/');
-export const getFeatureCards   = () => publicApi.get('/api/content/feature-cards/');
-export const getStoreInfo      = () => publicApi.get('/api/content/store-info/');
+export const getAllContent      = () => publicApi.get('/api/content/');
+export const getHeroSlides      = () => publicApi.get('/api/content/hero-slides/');
+export const getQuickCategories = () => publicApi.get('/api/content/quick-categories/');
+export const getAgeGroups       = () => publicApi.get('/api/content/age-groups/');
+export const getTrustItems      = () => publicApi.get('/api/content/trust-items/');
+export const getFeatureCards    = () => publicApi.get('/api/content/feature-cards/');
+export const getStoreInfo       = () => publicApi.get('/api/content/store-info/');
+
+// ── Razorpay Payment ───────────────────────────────────────────────────────────
+export const createRazorpayOrder   = (order_id) => api.post('/api/orders/payment/create-order/', { order_id });
+export const verifyRazorpayPayment = (data)      => api.post('/api/orders/payment/verify/', data);
+
+// ── Admin APIs ─────────────────────────────────────────────────────────────────
+export const getAdminDashboard  = ()          => api.get('/api/orders/admin/dashboard/');
+export const getAdminOrders     = (params)    => api.get('/api/orders/admin/', { params });
+export const updateAdminOrder   = (id, data)  => api.patch(`/api/orders/admin/${id}/`, data);
+export const getAdminCustomers  = (params)    => api.get('/api/users/admin/', { params });
+export const getAdminProducts   = (params)    => api.get('/api/products/admin/', { params });
+export const updateAdminProduct = (id, data)  => api.patch(`/api/products/admin/${id}/`, data);
 
 export default api;

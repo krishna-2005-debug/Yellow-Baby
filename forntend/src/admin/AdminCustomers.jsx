@@ -45,8 +45,8 @@ export default function AdminCustomers() {
     ));
   }, [customers, search]);
 
-  const total     = customers.length;
-  const active    = customers.filter(c => c.is_active).length;
+  const total      = customers.length;
+  const active     = customers.filter(c => c.is_active).length;
   const totalSpent = customers.reduce((a, c) => a + (c.total_spent || 0), 0);
 
   return (
@@ -128,12 +128,12 @@ export default function AdminCustomers() {
                     </div>
                   </td>
                   <td style={{ fontFamily: 'monospace', fontSize: 13 }}>{c.mobile}</td>
-                  <td style={{ fontWeight: 600 }}>{c.order_count || 0}</td>
+                  <td style={{ fontWeight: 600 }}>{c.total_orders || c.order_count || 0}</td>
                   <td style={{ fontWeight: 700, color: 'var(--adm-text)' }}>₹{(c.total_spent || 0).toLocaleString('en-IN')}</td>
                   <td style={{ fontSize: 12, color: 'var(--adm-text-muted)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                       <Calendar size={11} />
-                      {fmtDate(c.joined || c.date_joined || new Date().toISOString())}
+                      {fmtDate(c.joined || c.created_at || new Date().toISOString())}
                     </div>
                   </td>
                   <td>

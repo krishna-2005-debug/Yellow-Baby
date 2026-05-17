@@ -43,9 +43,9 @@ function ProductRow({ product, onToggle, onDelete }) {
           </div>
         </div>
       </td>
-      <td style={{ fontSize: 12 }}>{product.category__name || product.category || '—'}</td>
+      <td style={{ fontSize: 12 }}>{product.category || '—'}</td>
       <td style={{ fontWeight: 700, color: 'var(--adm-text)' }}>₹{Number(product.price).toLocaleString('en-IN')}</td>
-      <td><StockBadge stock={product.stock || 0} /></td>
+      <td><StockBadge stock={product.total_stock ?? product.stock ?? 0} /></td>
       <td>
         <span style={{ fontSize: 12, color: '#FCD34D' }}>
           {'★'.repeat(Math.floor(product.rating || 0))}
@@ -110,22 +110,21 @@ export default function AdminProducts() {
     let list = products;
     if (filter === 'active')   list = list.filter(p => p.is_active);
     if (filter === 'inactive') list = list.filter(p => !p.is_active);
-    if (filter === 'low')      list = list.filter(p => (p.stock || 0) <= 5);
+    if (filter === 'low')      list = list.filter(p => (p.total_stock ?? p.stock ?? 0) <= 5);
     if (search.trim()) list = list.filter(p =>
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.category__name || '').toLowerCase().includes(search.toLowerCase())
+      (p.category || '').toLowerCase().includes(search.toLowerCase())
     );
     setFiltered(list);
   }, [products, search, filter]);
 
   const handleToggle = async (id, active) => {
     try {
-      await api.patch(`/api/products/${id}/`, { is_active: active });
+      await api.patch(`/api/products/admin/${id}/`, { is_active: active });
       setProducts(prev => prev.map(p => p.id === id ? { ...p, is_active: active } : p));
       toast.success(`Product ${active ? 'activated' : 'deactivated'}`);
     } catch {
-      setProducts(prev => prev.map(p => p.id === id ? { ...p, is_active: active } : p));
-      toast.success(`Product ${active ? 'activated' : 'deactivated'} (demo)`);
+      toast.error('Failed to update product status');
     }
   };
 

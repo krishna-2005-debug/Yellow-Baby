@@ -25,8 +25,8 @@ function OrderRow({ order, onStatusChange }) {
       await api.patch(`/api/orders/admin/${order.id}/`, { status: newStatus });
       onStatusChange(order.id, newStatus);
       toast.success(`Order #${order.id} → ${newStatus}`);
-    } catch {
-      toast.error('Failed to update status');
+    } catch (e) {
+      toast.error(e?.response?.data?.message || 'Failed to update status');
     } finally { setChanging(false); }
   };
 
@@ -95,7 +95,8 @@ export default function AdminOrders() {
     setLoading(true);
     try {
       const { data } = await api.get('/api/orders/admin/');
-      setOrders(data.results || data);
+      const list = data.results || data;
+      setOrders(list);
     } catch {
       setOrders(DEMO_ORDERS);
     } finally { setLoading(false); }
