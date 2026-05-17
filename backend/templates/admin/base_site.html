@@ -34,6 +34,17 @@
     --bd:  #E5E7EB;
     --hd:  #FFFFFF;
     --r:   10px;
+    
+    /* Buttons */
+    --button-fg: #fff;
+    --button-bg: var(--p);
+    --button-hover-bg: var(--pd);
+    --default-button-bg: var(--p);
+    --default-button-hover-bg: var(--pd);
+    --close-button-bg: #888;
+    --close-button-hover-bg: #747474;
+    --delete-button-bg: #EF4444;
+    --delete-button-hover-bg: #DC2626;
     --s0:  0 1px 2px rgba(0,0,0,0.04);
     --s1:  0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
     --s2:  0 4px 6px -1px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.04);
@@ -59,6 +70,16 @@
       --selected-bg: var(--pl) !important;
       --selected-row: var(--pl) !important;
       --border-color: var(--bd) !important;
+      
+      --button-fg: #fff !important;
+      --button-bg: var(--p) !important;
+      --button-hover-bg: var(--pd) !important;
+      --default-button-bg: var(--p) !important;
+      --default-button-hover-bg: var(--pd) !important;
+      --close-button-bg: var(--tm) !important;
+      --close-button-hover-bg: var(--tx) !important;
+      --delete-button-bg: #EF4444 !important;
+      --delete-button-hover-bg: #DC2626 !important;
     }
   }
 
@@ -248,31 +269,38 @@
   .module table td a,.module table th a{color:var(--pd) !important;font-weight:600;}
 
   /* ── BUTTONS ── */
-  .button,input[type=submit],input[type=button],
-  .submit-row input,a.button,.object-tools a{
-    background:var(--p) !important;
-    border:1px solid var(--pd) !important;
-    color:#fff !important;
-    border-radius:6px !important;
-    font-weight:600 !important;
-    font-size:12px !important;
-    padding:7px 14px !important;
-    transition:all 0.15s !important;
-    cursor:pointer;
-    text-decoration:none !important;
-    letter-spacing:0.1px;
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
+  .button, input[type=submit], input[type=button], .submit-row input, a.button, .object-tools a {
+    background: var(--button-bg) !important;
+    border: none !important;
+    color: var(--button-fg) !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    transition: all 0.15s !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    letter-spacing: 0.1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
   }
-  .button:hover,input[type=submit]:hover,.object-tools a:hover{
-    background:var(--pd) !important;
-    box-shadow:0 4px 10px rgba(217,119,6,0.25) !important;
-    transform:translateY(-1px);
+  .button:hover, input[type=submit]:hover, .object-tools a:hover {
+    background: var(--button-hover-bg) !important;
+    box-shadow: 0 4px 12px rgba(217,119,6,0.2) !important;
+    transform: translateY(-1px);
   }
-  .deletelink,a.deletelink{background:#EF4444 !important;border-color:#DC2626 !important;}
-  .deletelink:hover,a.deletelink:hover{background:#DC2626 !important;box-shadow:0 4px 10px rgba(220,38,38,0.25) !important;}
-  .closelink{color:var(--tm) !important;background:var(--sh) !important;border-color:var(--bd) !important;}
+  .button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--default-button-bg) !important;
+  }
+  .button.default:hover, input[type=submit].default:hover, .submit-row input.default:hover {
+    background: var(--default-button-hover-bg) !important;
+  }
+  .deletelink, a.deletelink { background: var(--delete-button-bg) !important; color: #fff !important; }
+  .deletelink:hover, a.deletelink:hover { background: var(--delete-button-hover-bg) !important; box-shadow: 0 4px 12px rgba(220,38,38,0.2) !important; }
+  .closelink, a.closelink { color: var(--tx) !important; background: var(--sh) !important; border: 1px solid var(--bd) !important; }
+  .closelink:hover, a.closelink:hover { background: var(--bd) !important; }
 
   /* ── LINKS ── */
   a:link,a:visited{color:var(--pd);text-decoration:none;transition:color 0.12s;}
