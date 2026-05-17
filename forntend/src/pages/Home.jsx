@@ -22,9 +22,9 @@ import { getProducts, getCategories, getAllContent } from '../api/api';
 
 /* ── Fallback data (used until API responds) ──────────────────────────────── */
 const FALLBACK_SLIDES = [
-  { id: 1, bg_from: 'amber-50', bg_via: 'yellow-50', bg_to: 'orange-50', decor_bg: 'yellow-100', image: null, tag: '✨ New Arrivals', title: 'Tiny Styles,\nBig Smiles', subtitle: 'Soft, safe clothing made for little explorers', cta_label: 'Shop New Arrivals', cta_url: '/', accent_from: 'yellow-400', accent_to: 'amber-500' },
-  { id: 2, bg_from: 'pink-50',  bg_via: 'rose-50',   bg_to: 'fuchsia-50',decor_bg: 'pink-100',   image: null, tag: "💗 Girls' Collection", title: 'Pretty Little\nThings', subtitle: 'Dresses, frocks & more for your little princess', cta_label: 'Shop Girls', cta_url: '/?gender=girls', accent_from: 'pink-400', accent_to: 'rose-500' },
-  { id: 3, bg_from: 'sky-50',   bg_via: 'blue-50',   bg_to: 'indigo-50', decor_bg: 'blue-100',   image: null, tag: "💙 Boys' Collection",  title: 'Adventure\nStarts Here', subtitle: 'Cool, comfy fits for active little boys', cta_label: 'Shop Boys', cta_url: '/?gender=boys', accent_from: 'blue-400', accent_to: 'sky-500' },
+  { id: 1, title: 'Tiny Styles,\nBig Smiles', subtitle: 'Soft, safe clothing made for little explorers', tag: '✨ New Arrivals', cta_label: 'Shop New Arrivals', cta_url: '/', bg_from: 'amber-50', bg_via: 'yellow-50', bg_to: 'orange-50', accent_from: 'yellow-400', accent_to: 'amber-500', decor_bg: 'yellow-100', image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=80' },
+  { id: 2, title: 'Pretty Little\nThings', subtitle: 'Dresses, frocks & more for your little princess', tag: '💗 Girls\' Collection', cta_label: 'Shop Girls', cta_url: '/?gender=girls', bg_from: 'pink-50', bg_via: 'rose-50', bg_to: 'fuchsia-50', accent_from: 'pink-400', accent_to: 'rose-500', decor_bg: 'pink-100', image: 'https://images.unsplash.com/photo-1518831959646-f40cac59eb8a?w=800&q=80' },
+  { id: 3, title: 'Adventure\nStarts Here', subtitle: 'Cool, comfy fits for active little boys', tag: '💙 Boys\' Collection', cta_label: 'Shop Boys', cta_url: '/?gender=boys', bg_from: 'sky-50', bg_via: 'blue-50', bg_to: 'indigo-50', accent_from: 'blue-400', accent_to: 'sky-500', decor_bg: 'blue-100', image: 'https://images.unsplash.com/photo-1471286174890-9c112d708306?w=800&q=80' },
 ];
 const FALLBACK_CATS = [
   { id: 1, image: null, label: 'Dresses',    search_filter: 'Dresses',      gender_filter: '' },
@@ -209,7 +209,16 @@ export default function Home() {
                 className="relative w-full h-full drop-shadow-2xl flex items-center justify-center cursor-pointer"
                 style={{ animation: 'heroFloat 3s ease-in-out infinite' }}>
                 {slide.image ? (
-                  <img src={slide.image} alt={slide.title} className="max-w-full max-h-full object-contain" />
+                  <img 
+                    src={slide.image} 
+                    alt={slide.title} 
+                    className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-2xl" 
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      // Fallback to a default unsplash image if the Render image is broken (404)
+                      e.target.src = "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=80";
+                    }}
+                  />
                 ) : (
                   <div className="w-48 h-48 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center text-gray-400">No Image</div>
                 )}
