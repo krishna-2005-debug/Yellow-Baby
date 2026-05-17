@@ -17,6 +17,8 @@ class CartView(APIView):
 
     def get(self, request):
         cart, _ = Cart.objects.get_or_create(user=request.user)
+        # Prefetch to prevent N+1 queries during serialization
+        cart = Cart.objects.prefetch_related('items__product_variant__product__images').get(pk=cart.pk)
         serializer = CartSerializer(cart, context={'request': request})
         return Response(serializer.data)
 
@@ -51,7 +53,10 @@ class AddToCartView(APIView):
         cart_item.quantity = new_quantity
         cart_item.save()
 
-        cart_serializer = CartSerializer(cart, context={'request': request})
+        cart_serializer = CartSerializer(
+            Cart.objects.prefetch_related('items__product_variant__product__images').get(pk=cart.pk),
+            context={'request': request}
+        )
         return Response(
             {'message': 'Item added to cart.', 'cart': cart_serializer.data},
             status=status.HTTP_200_OK,
@@ -78,7 +83,10 @@ class UpdateCartItemView(APIView):
         cart_item.quantity = quantity
         cart_item.save()
 
-        cart_serializer = CartSerializer(cart_item.cart, context={'request': request})
+        cart_serializer = CartSerializer(
+            Cart.objects.prefetch_related('items__product_variant__product__images').get(pk=cart_item.cart_id),
+            context={'request': request}
+        )
         return Response({'message': 'Cart updated.', 'cart': cart_serializer.data})
 
 
@@ -91,7 +99,10 @@ class RemoveCartItemView(APIView):
         cart = cart_item.cart
         cart_item.delete()
 
-        cart_serializer = CartSerializer(cart, context={'request': request})
+        cart_serializer = CartSerializer(
+            Cart.objects.prefetch_related('items__product_variant__product__images').get(pk=cart.pk),
+            context={'request': request}
+        )
         return Response({'message': 'Item removed from cart.', 'cart': cart_serializer.data})
 
 

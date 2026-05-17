@@ -37,6 +37,9 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('orders', 'addresses')
+
     def role_badge(self, obj):
         if obj.role == 'admin':
             return mark_safe(
@@ -50,12 +53,12 @@ class UserAdmin(BaseUserAdmin):
     role_badge.short_description = 'Role'
 
     def address_count(self, obj):
-        c = obj.addresses.count()
+        c = len(obj.addresses.all())
         return f'{c} address{"es" if c != 1 else ""}'
     address_count.short_description = 'Addresses'
 
     def order_count(self, obj):
-        c = obj.orders.count()
+        c = len(obj.orders.all())
         return format_html('<strong>{}</strong> order{}', c, 's' if c != 1 else '')
     order_count.short_description = 'Orders'
 
@@ -102,8 +105,8 @@ class UserAdmin(BaseUserAdmin):
                 str(u.role).title(), 
                 'Yes' if u.is_active else 'No',
                 u.created_at.strftime('%Y-%m-%d %H:%M'), 
-                u.orders.count(),
-                u.addresses.count()
+                len(u.orders.all()),
+                len(u.addresses.all())
             ])
             
         # Auto-adjust column widths
@@ -151,6 +154,9 @@ class AddressAdmin(ModelAdmin):
     list_display = ['name', 'user_mobile', 'city', 'state', 'pincode', 'is_default']
     list_filter = ['state', 'is_default']
     search_fields = ['name', 'user__mobile', 'city', 'pincode']
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user')
 
     def user_mobile(self, obj):
         return obj.user.mobile

@@ -22,8 +22,9 @@ class CartItemSerializer(serializers.ModelSerializer):
         ]
 
     def get_primary_image(self, obj):
-        img = obj.product_variant.product.images.first()
-        if img:
+        images = obj.product_variant.product.images.all()
+        if images:
+            img = images[0]
             request = self.context.get('request')
             return request.build_absolute_uri(img.image.url) if request else img.image.url
         return None

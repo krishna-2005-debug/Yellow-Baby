@@ -55,6 +55,9 @@ class OrderAdmin(ModelAdmin):
 
     # ── Display Methods ────────────────────────────────────────────────────────
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user').prefetch_related('items')
+
     def order_id(self, obj):
         return format_html('<strong style="color:#FF6B35;">#{}</strong>', obj.id)
     order_id.short_description = 'Order'
@@ -102,7 +105,7 @@ class OrderAdmin(ModelAdmin):
     payment_badge.short_description = 'Payment'
 
     def item_count(self, obj):
-        c = obj.items.count()
+        c = len(obj.items.all())
         return format_html('<span style="font-weight:600;">{} item{}</span>', c, 's' if c != 1 else '')
     item_count.short_description = 'Items'
 
@@ -218,7 +221,7 @@ class OrderAdmin(ModelAdmin):
                 order.get_status_display(),
                 order.get_payment_method_display(),
                 order.get_payment_status_display(),
-                order.items.count(),
+                len(order.items.all()),
                 order.created_at.strftime('%d-%m-%Y %H:%M'),
             ])
         return response

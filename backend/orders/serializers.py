@@ -33,7 +33,7 @@ class OrderListSerializer(serializers.ModelSerializer):
         ]
 
     def get_item_count(self, obj):
-        return obj.items.count()
+        return len(obj.items.all())
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):

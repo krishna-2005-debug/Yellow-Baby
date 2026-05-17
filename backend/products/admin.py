@@ -54,8 +54,11 @@ class CategoryAdmin(ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ['is_active']
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('products')
+
     def product_count(self, obj):
-        count = obj.products.filter(is_active=True).count()
+        count = len([p for p in obj.products.all() if p.is_active])
         return format_html('<strong>{}</strong> products', count)
     product_count.short_description = 'Active Products'
 
@@ -92,8 +95,12 @@ class ProductAdmin(ModelAdmin):
         }),
     )
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('category').prefetch_related('images', 'variants')
+
     def thumbnail(self, obj):
-        img = obj.images.filter(is_primary=True).first() or obj.images.first()
+        images = list(obj.images.all())
+        img = next((i for i in images if i.is_primary), None) or (images[0] if images else None)
         if img:
             return format_html(
                 '<img src="{}" width="52" height="52" style="object-fit:cover;border-radius:8px;'
@@ -119,8 +126,9 @@ class ProductAdmin(ModelAdmin):
 
     def stock_display(self, obj):
         total = obj.total_stock
-        out_of_stock = obj.variants.filter(stock=0).count()
-        low_stock = obj.variants.filter(stock__gt=0, stock__lt=5).count()
+        variants = list(obj.variants.all())
+        out_of_stock = len([v for v in variants if v.stock == 0])
+        low_stock = len([v for v in variants if 0 < v.stock < 5])
 
         if total == 0:
             return format_html('<span style="color:#DC143C;font-weight:700;">✗ Out of stock</span>')
@@ -173,6 +181,9 @@ class ProductVariantAdmin(ModelAdmin):
     ordering = ['product', 'size']
     list_per_page = 30
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('product')
+
     def stock_display(self, obj):
         if obj.stock == 0:
             color = '#DC143C'
@@ -215,6 +226,9 @@ class WishlistAdmin(ModelAdmin):
     list_filter = ['added_at']
     ordering = ['-added_at']
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user', 'product')
+
     def user_mobile(self, obj):
         return obj.user.mobile
     user_mobile.short_description = 'Customer'
@@ -243,6 +257,9 @@ class ProductReviewAdmin(ModelAdmin):
     list_editable = ['is_approved']
     ordering = ['-created_at']
     actions = ['approve_reviews', 'reject_reviews']
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('user', 'product')
 
     def user_mobile(self, obj):
         return obj.user.mobile
