@@ -17,7 +17,7 @@ const DEMO_PRODUCTS = [
 function StockBadge({ stock }) {
   if (stock === 0) return <span className="adm-badge adm-badge-cancelled">Out of Stock</span>;
   if (stock <= 5) return <span style={{ color: '#FCD34D', fontWeight: 700, fontSize: 13 }}>{stock} low</span>;
-  return <span style={{ color: 'var(--adm-text-sub)', fontSize: 13 }}>{stock}</span>;
+  return <span style={{ color: '#374151', fontSize: 13 }}>{stock}</span>;
 }
 
 function ProductRow({ product, onToggle, onDelete }) {
@@ -201,4 +201,6 @@ export default function AdminProducts() {
     </div>
   );
 }
+
+
 

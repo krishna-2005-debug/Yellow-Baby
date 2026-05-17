@@ -56,7 +56,7 @@ function OrderRow({ order, onStatusChange }) {
           {open && (
             <div style={{
               position: 'absolute', top: '110%', right: 0, zIndex: 50,
-              background: 'var(--adm-surface2)', border: '1px solid var(--adm-border)',
+              background: '#FFFFFF', border: '1px solid var(--adm-border)',
               borderRadius: 10, overflow: 'hidden', minWidth: 130,
               boxShadow: 'var(--adm-s3)',
             }}>
@@ -70,7 +70,7 @@ function OrderRow({ order, onStatusChange }) {
                     color: s === order.status ? 'var(--adm-accent)' : 'var(--adm-text-sub)',
                     textTransform: 'capitalize',
                   }}
-                  onMouseEnter={e => e.target.style.background = 'rgba(255,255,255,0.05)'}
+                  onMouseEnter={e => e.target.style.background = '#F9FAFB'}
                   onMouseLeave={e => e.target.style.background = s === order.status ? 'rgba(245,158,11,0.1)' : 'transparent'}
                 >
                   {s}
@@ -190,4 +190,6 @@ export default function AdminOrders() {
     </div>
   );
 }
+
+
 

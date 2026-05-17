@@ -49,7 +49,7 @@ export default function AdminCoupons() {
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ width: 60, height: 5, background: 'rgba(255,255,255,0.06)', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${(c.usage_count / c.max_usage) * 100}%`, background: 'linear-gradient(90deg,#10B981,#059669)', borderRadius: 3 }} />
+                      <div style={{ height: '100%', width: `${(c.usage_count / c.max_usage) * 100}%`, background: 'linear-gradient(90deg,#FBBF24,#F59E0B)', borderRadius: 3 }} />
                     </div>
                     <span style={{ fontSize: 11, color: 'var(--adm-text-muted)' }}>{c.usage_count}/{c.max_usage}</span>
                   </div>
@@ -73,4 +73,6 @@ export default function AdminCoupons() {
     </div>
   );
 }
+
+
 
