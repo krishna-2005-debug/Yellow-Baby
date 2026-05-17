@@ -99,9 +99,11 @@ div.breadcrumbs a:hover{text-decoration:underline;}
 #content h1{font-size:22px;font-weight:800;color:var(--yb-text);letter-spacing:-0.5px;margin:0 0 20px;line-height:1;}
 #content-main{flex:1;min-width:0;}
 
-/* ── LINKS ── */
+/* ── LINKS & IMAGES ── */
 a:link,a:visited{color:var(--yb-amber-d);text-decoration:none;transition:color 0.12s;}
 a:hover{color:#B45309;}
+a img{border:none!important;outline:none!important;}
+.file-upload a img{max-height:80px;border-radius:6px;box-shadow:var(--yb-s1);object-fit:contain;}
 
 /* ── MODULE CARDS ── */
 .module{background:var(--yb-surface)!important;border-radius:var(--yb-r)!important;border:1px solid var(--yb-border)!important;box-shadow:var(--yb-s1)!important;overflow:hidden;margin-bottom:16px;}
@@ -130,7 +132,7 @@ tbody td,tbody th{background:transparent!important;}
 .button:hover,input[type=submit]:hover,.object-tools a:hover,.submit-row input:hover{
   background:var(--yb-amber-d)!important;box-shadow:0 4px 12px rgba(217,119,6,0.3)!important;transform:translateY(-1px);
 }
-.deletelink,a.deletelink{background:var(--yb-red)!important;box-shadow:0 1px 3px rgba(239,68,68,0.15)!important;}
+.deletelink,a.deletelink{background:var(--yb-red)!important;box-shadow:0 1px 3px rgba(239,68,68,0.15)!important;background-image:none!important;text-indent:0!important;}
 .deletelink:hover,a.deletelink:hover{background:var(--yb-red-d)!important;box-shadow:0 4px 12px rgba(220,38,38,0.25)!important;}
 .closelink,a.closelink{background:var(--yb-surface2)!important;color:var(--yb-text)!important;border:1px solid var(--yb-border)!important;box-shadow:none!important;}
 .closelink:hover,a.closelink:hover{background:var(--yb-border)!important;transform:none;}
@@ -144,6 +146,8 @@ tbody td,tbody th{background:transparent!important;}
 #result_list tbody tr:last-child td,#result_list tbody tr:last-child th{border-bottom:none!important;}
 #result_list tbody tr:hover td,#result_list tbody tr:hover th{background:var(--yb-surface2)!important;}
 tr.selected td,tr.selected th{background:var(--yb-amber-l)!important;}
+#result_list img{max-height:50px;border-radius:4px;object-fit:contain;border:none!important;outline:none!important;}
+#result_list a img{border:none!important;}
 #result_list input[type=checkbox]{accent-color:var(--yb-amber);width:14px;height:14px;}
 
 /* ── SEARCH ── */
@@ -209,7 +213,7 @@ fieldset.module h2{font-size:10.5px!important;text-transform:uppercase!important
 
 /* ── MESSAGES ── */
 .messagelist{margin:0 0 16px;padding:0;list-style:none;}
-.messagelist li{padding:10px 16px;border-radius:8px;font-size:12.5px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.messagelist li{padding:10px 16px;border-radius:8px;font-size:12.5px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:8px;background-image:none!important;}
 .messagelist li.success{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;}
 .messagelist li.warning{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;}
 .messagelist li.error{background:#FEF2F2;color:#991B1B;border:1px solid #FECACA;}
