@@ -70,7 +70,7 @@ export default function AdminAnalytics() {
           { label: 'Total Revenue', value: '₹18.2L', sub: 'All time', icon: TrendingUp, color: '#F59E0B' },
           { label: 'Total Orders', value: '892', sub: '134 this month', icon: ShoppingCart, color: '#3B82F6' },
           { label: 'Customers', value: '216', sub: '18 new this week', icon: Users, color: '#10B981' },
-          { label: 'Avg. Order', value: '₹2,040', sub: 'Per transaction', icon: Package, color: '#8B5CF6' },
+          { label: 'Avg. Order', value: '₹2,040', sub: 'Per transaction', icon: Package, color: '#059669' },
         ].map(({ label, value, sub, icon: Icon, color }) => (
           <div key={label} className="adm-kpi">
             <div className="adm-kpi-stripe" style={{ background: color }} />
@@ -102,7 +102,7 @@ export default function AdminAnalytics() {
             <div style={{ fontSize: 11, color: 'var(--adm-text-muted)', marginBottom: 16 }}>
               This week · <span style={{ color: '#6EE7B7' }}>↑ 12% vs last week</span>
             </div>
-            <BarChartSvg data={WEEKLY} color="#6366F1" />
+            <BarChartSvg data={WEEKLY} color="#10B981" />
           </div>
         </div>
 
@@ -118,7 +118,7 @@ export default function AdminAnalytics() {
             <div style={{ fontSize: 11, color: 'var(--adm-text-muted)', marginBottom: 16 }}>
               May 2026 · <span style={{ color: '#6EE7B7' }}>↑ 8% vs April</span>
             </div>
-            <BarChartSvg data={MONTHLY} color="#8B5CF6" />
+            <BarChartSvg data={MONTHLY} color="#059669" />
           </div>
         </div>
       </div>
@@ -143,9 +143,9 @@ export default function AdminAnalytics() {
                   <td>
                     <div style={{
                       width: 24, height: 24, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      background: i === 0 ? 'rgba(99,102,241,0.2)' : 'rgba(255,255,255,0.04)',
+                      background: i === 0 ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.04)',
                       fontSize: 11, fontWeight: 800,
-                      color: i === 0 ? '#818CF8' : 'var(--adm-text-muted)',
+                      color: i === 0 ? '#34D399' : 'var(--adm-text-muted)',
                     }}>
                       {i + 1}
                     </div>
@@ -156,7 +156,7 @@ export default function AdminAnalytics() {
                   <td style={{ width: 160 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <div style={{ flex: 1, height: 6, background: 'rgba(255,255,255,0.06)', borderRadius: 3, overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${pct}%`, background: 'linear-gradient(90deg,#6366F1,#8B5CF6)', borderRadius: 3, transition: 'width 0.6s ease' }} />
+                        <div style={{ height: '100%', width: `${pct}%`, background: 'linear-gradient(90deg,#10B981,#059669)', borderRadius: 3, transition: 'width 0.6s ease' }} />
                       </div>
                       <span style={{ fontSize: 11, color: 'var(--adm-text-muted)', width: 30, textAlign: 'right' }}>{pct}%</span>
                     </div>
@@ -170,3 +170,4 @@ export default function AdminAnalytics() {
     </div>
   );
 }
+

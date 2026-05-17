@@ -116,7 +116,7 @@ export default function AdminCustomers() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{
                         width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                        background: 'linear-gradient(135deg,#6366F1,#8B5CF6)',
+                        background: 'linear-gradient(135deg,#10B981,#059669)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontSize: 12, fontWeight: 800, color: '#fff',
                       }}>
@@ -159,3 +159,4 @@ export default function AdminCustomers() {
     </div>
   );
 }
+

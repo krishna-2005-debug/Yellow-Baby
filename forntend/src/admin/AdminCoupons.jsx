@@ -34,11 +34,11 @@ export default function AdminCoupons() {
                 <td>
                   <div style={{
                     display: 'inline-flex', alignItems: 'center', gap: 6,
-                    background: 'rgba(99,102,241,0.12)', border: '1px dashed rgba(99,102,241,0.35)',
+                    background: 'rgba(16,185,129,0.12)', border: '1px dashed rgba(16,185,129,0.35)',
                     borderRadius: 7, padding: '3px 10px',
                   }}>
-                    <Tag size={11} color="#818CF8" />
-                    <strong style={{ color: '#818CF8', fontSize: 13, letterSpacing: 0.5 }}>{c.code}</strong>
+                    <Tag size={11} color="#34D399" />
+                    <strong style={{ color: '#34D399', fontSize: 13, letterSpacing: 0.5 }}>{c.code}</strong>
                   </div>
                 </td>
                 <td style={{ textTransform: 'capitalize' }}>{c.discount_type}</td>
@@ -49,7 +49,7 @@ export default function AdminCoupons() {
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ width: 60, height: 5, background: 'rgba(255,255,255,0.06)', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${(c.usage_count / c.max_usage) * 100}%`, background: 'linear-gradient(90deg,#6366F1,#8B5CF6)', borderRadius: 3 }} />
+                      <div style={{ height: '100%', width: `${(c.usage_count / c.max_usage) * 100}%`, background: 'linear-gradient(90deg,#10B981,#059669)', borderRadius: 3 }} />
                     </div>
                     <span style={{ fontSize: 11, color: 'var(--adm-text-muted)' }}>{c.usage_count}/{c.max_usage}</span>
                   </div>
@@ -73,3 +73,4 @@ export default function AdminCoupons() {
     </div>
   );
 }
+

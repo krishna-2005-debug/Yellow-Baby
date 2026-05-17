@@ -132,7 +132,7 @@ export default function AdminDashboard() {
           icon={Activity} color="#10B981" />
         <KpiCard label="Products" value={s.total_products || 0}
           sub={`${s.active_products || 0} active`}
-          icon={Package} color="#8B5CF6" />
+          icon={Package} color="#059669" />
         <KpiCard label="Low Stock" value={s.low_stock_count || 0}
           sub="variants below 5 units"
           icon={AlertTriangle} color="#EF4444" trend={s.low_stock_count > 0 ? -1 : null} trendLabel="needs attention" />
@@ -261,3 +261,4 @@ const DEMO_STATS = {
     { name: 'Baby Romper',    product__name: 'Baby Romper',    size: '6M',  stock: 1 },
   ],
 };
+
