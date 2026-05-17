@@ -8,6 +8,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import './admin.css';
+import { BASE_URL } from '../api/api';
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: 'Dashboard',  to: '/admin-panel' },
