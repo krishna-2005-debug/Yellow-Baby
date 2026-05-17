@@ -37,6 +37,12 @@ class RequestOTPView(APIView):
         serializer.is_valid(raise_exception=True)
         mobile = serializer.validated_data['mobile']
 
+        # Clean up old OTPs (older than 24 hours)
+        from datetime import timedelta
+        OTP.objects.filter(
+            created_at__lt=timezone.now() - timedelta(hours=24)
+        ).delete()
+
         # Invalidate any previous unused OTPs
         OTP.objects.filter(mobile=mobile, is_used=False).update(is_used=True)
 

@@ -7,11 +7,10 @@ from django.conf.urls.static import static
 # ── Custom Admin Site ──────────────────────────────────────────────────────────
 from yellow_baby_backend.admin_site import yellow_baby_admin
 from analytics.views import analytics_dashboard
-from .views import health, debug_info, api_root
+from .views import health, api_root
 
 urlpatterns = [
-    path('', api_root),   # Root URL — shows API info
-    # Analytics dashboard MUST come before admin/ so it isn't swallowed
+    path('', api_root),
     path('admin/analytics/', analytics_dashboard, name='analytics-dashboard'),
     path('admin/', yellow_baby_admin.urls),
     path('api/users/', include('users.urls')),
@@ -20,5 +19,4 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/content/', include('content.urls')),
     path('health/', health),
-    path('debug-info/', debug_info),   # ← REMOVE after diagnosis
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

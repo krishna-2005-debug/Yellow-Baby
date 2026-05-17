@@ -152,7 +152,9 @@ class OrderListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user)\
+            .select_related('coupon')\
+            .prefetch_related('items')
 
 
 class OrderDetailView(generics.RetrieveAPIView):
@@ -172,7 +174,7 @@ class CancelOrderView(APIView):
     def post(self, request, pk):
         order = get_object_or_404(Order, pk=pk, user=request.user)
 
-        if order.status not in ('pending', 'packed'):
+        if order.status not in ('pending', 'confirmed', 'packed'):
             return Response(
                 {'message': f'Cannot cancel an order with status "{order.status}".'},
                 status=status.HTTP_400_BAD_REQUEST,

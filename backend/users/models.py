@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class OTP(models.Model):
-    mobile = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=15, db_index=True)  # indexed for fast lookup
     code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     is_used = models.BooleanField(default=False)

@@ -21,14 +21,14 @@ print('Hero Slides seeded:', HeroSlide.objects.count())
 # ── Quick Categories ───────────────────────────────────────────────────────────
 QuickCategory.objects.all().delete()
 QuickCategory.objects.bulk_create([
-    QuickCategory(order=1, label='Dresses',    search_filter='Dresses',     is_active=True),
-    QuickCategory(order=2, label='T-Shirts',   search_filter='T-Shirts',    is_active=True),
-    QuickCategory(order=3, label='Bottoms',    search_filter='Bottoms',     is_active=True),
-    QuickCategory(order=4, label='Winter Wear',search_filter='Winter Wear', is_active=True),
-    QuickCategory(order=5, label='Sets',       search_filter='Sets & Combos',is_active=True),
-    QuickCategory(order=6, label='Girls',      gender_filter='girls',        is_active=True),
-    QuickCategory(order=7, label='Boys',       gender_filter='boys',         is_active=True),
-    QuickCategory(order=8, label='Unisex',     gender_filter='unisex',       is_active=True),
+    QuickCategory(order=1, emoji='👗', label='Dresses',    search_filter='Dresses',     is_active=True),
+    QuickCategory(order=2, emoji='👕', label='T-Shirts',   search_filter='T-Shirts',    is_active=True),
+    QuickCategory(order=3, emoji='👖', label='Bottoms',    search_filter='Bottoms',     is_active=True),
+    QuickCategory(order=4, emoji='🧥', label='Winter Wear',search_filter='Winter Wear', is_active=True),
+    QuickCategory(order=5, emoji='🩲', label='Sets',       search_filter='Sets & Combos',is_active=True),
+    QuickCategory(order=6, emoji='🎀', label='Girls',      gender_filter='girls',        is_active=True),
+    QuickCategory(order=7, emoji='🚗', label='Boys',       gender_filter='boys',         is_active=True),
+    QuickCategory(order=8, emoji='🌈', label='Unisex',     gender_filter='unisex',       is_active=True),
 ])
 print('Quick Categories seeded:', QuickCategory.objects.count())
 

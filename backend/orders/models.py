@@ -74,6 +74,7 @@ class Coupon(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
         ('packed', 'Packed'),
         ('shipped', 'Shipped'),
         ('delivered', 'Delivered'),
