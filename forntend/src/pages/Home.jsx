@@ -20,11 +20,23 @@ import { getProducts, getCategories, getAllContent } from '../api/api';
   bg-green-50 border-green-100 text-green-700
 ────────────────────────────────────────────────────────────────────────────── */
 
+/* ── Slide color themes (inline styles — avoids Tailwind purge) ─────────────── */
+const SLIDE_THEMES = {
+  amber:  { bg: 'linear-gradient(135deg,#FFFBEB,#FEF9C3,#FFF7ED)', accent: 'linear-gradient(135deg,#FBBF24,#F59E0B)', decor: '#FEF3C7', blob: 'rgba(251,191,36,0.18)' },
+  pink:   { bg: 'linear-gradient(135deg,#FDF2F8,#FFF1F2,#FAF5FF)', accent: 'linear-gradient(135deg,#F472B6,#F43F5E)', decor: '#FCE7F3', blob: 'rgba(244,114,182,0.18)' },
+  blue:   { bg: 'linear-gradient(135deg,#F0F9FF,#EFF6FF,#EEF2FF)', accent: 'linear-gradient(135deg,#60A5FA,#38BDF8)', decor: '#DBEAFE', blob: 'rgba(96,165,250,0.18)' },
+};
+function getTheme(slide) {
+  if (slide.bg_from?.startsWith('pink') || slide.bg_from?.startsWith('rose')) return SLIDE_THEMES.pink;
+  if (slide.bg_from?.startsWith('sky') || slide.bg_from?.startsWith('blue') || slide.bg_from?.startsWith('indigo')) return SLIDE_THEMES.blue;
+  return SLIDE_THEMES.amber;
+}
+
 /* ── Fallback data (used until API responds) ──────────────────────────────── */
 const FALLBACK_SLIDES = [
-  { id: 1, title: 'Tiny Styles,\nBig Smiles', subtitle: 'Soft, safe clothing made for little explorers', tag: '✨ New Arrivals', cta_label: 'Shop New Arrivals', cta_url: '/', bg_from: 'amber-50', bg_via: 'yellow-50', bg_to: 'orange-50', accent_from: 'yellow-400', accent_to: 'amber-500', decor_bg: 'yellow-100', image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=80' },
-  { id: 2, title: 'Pretty Little\nThings', subtitle: 'Dresses, frocks & more for your little princess', tag: '💗 Girls\' Collection', cta_label: 'Shop Girls', cta_url: '/?gender=girls', bg_from: 'pink-50', bg_via: 'rose-50', bg_to: 'fuchsia-50', accent_from: 'pink-400', accent_to: 'rose-500', decor_bg: 'pink-100', image: 'https://images.unsplash.com/photo-1518831959646-f40cac59eb8a?w=800&q=80' },
-  { id: 3, title: 'Adventure\nStarts Here', subtitle: 'Cool, comfy fits for active little boys', tag: '💙 Boys\' Collection', cta_label: 'Shop Boys', cta_url: '/?gender=boys', bg_from: 'sky-50', bg_via: 'blue-50', bg_to: 'indigo-50', accent_from: 'blue-400', accent_to: 'sky-500', decor_bg: 'blue-100', image: 'https://images.unsplash.com/photo-1471286174890-9c112d708306?w=800&q=80' },
+  { id: 1, title: 'Tiny Styles, Big Smiles', subtitle: 'Soft, safe clothing made for little explorers', tag: '✨ New Arrivals', cta_label: 'Shop New Arrivals', cta_url: '/', bg_from: 'amber-50', accent_from: 'yellow-400', image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=80' },
+  { id: 2, title: 'Pretty Little Things', subtitle: 'Dresses, frocks & more for your little princess', tag: "💗 Girls' Collection", cta_label: 'Shop Girls', cta_url: '/?gender=girls', bg_from: 'pink-50', accent_from: 'pink-400', image: 'https://images.unsplash.com/photo-1518831959646-f40cac59eb8a?w=800&q=80' },
+  { id: 3, title: 'Adventure Starts Here', subtitle: 'Cool, comfy fits for active little boys', tag: "💙 Boys' Collection", cta_label: 'Shop Boys', cta_url: '/?gender=boys', bg_from: 'sky-50', accent_from: 'blue-400', image: 'https://images.unsplash.com/photo-1471286174890-9c112d708306?w=800&q=80' },
 ];
 const FALLBACK_CATS = [
   { id: 1, image: null, label: 'Dresses',    search_filter: 'Dresses',      gender_filter: '' },
@@ -165,83 +177,111 @@ export default function Home() {
       <SEO title="Shop the Best Kids Clothing" description="Explore our premium collections for baby and kids clothing. Dresses, sets, winter wear and more." />
 
       {/* ── Hero ── */}
-      <section className={`relative bg-gradient-to-br from-${slide.bg_from} via-${slide.bg_via} to-${slide.bg_to} pt-16 transition-colors duration-700 overflow-hidden`}>
-        {/* Decorative blobs */}
-        <div className={`absolute top-10 right-10 w-64 h-64 rounded-full bg-${slide.decor_bg} opacity-40 blur-3xl pointer-events-none`} />
-        <div className={`absolute bottom-0 left-0 w-48 h-48 rounded-full bg-${slide.decor_bg} opacity-30 blur-2xl pointer-events-none`} />
+      {(() => {
+        const theme = getTheme(slide);
+        return (
+          <section style={{ background: theme.bg, paddingTop: '64px', position: 'relative', overflow: 'hidden', transition: 'background 0.7s' }}>
+            {/* Decorative blobs */}
+            <div style={{ position: 'absolute', top: '40px', right: '40px', width: '260px', height: '260px', borderRadius: '50%', background: theme.blob, filter: 'blur(60px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: '180px', height: '180px', borderRadius: '50%', background: theme.blob, filter: 'blur(40px)', pointerEvents: 'none' }} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-20 relative z-10">
-          <div className="flex flex-row items-center gap-4 md:gap-8">
-            {/* Text */}
-            <div className="flex-1 space-y-3 md:space-y-5 min-w-0">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold text-white bg-gradient-to-r from-${slide.accent_from} to-${slide.accent_to} shadow-md`}>
-                {slide.tag}
-              </span>
-              <h1 className="text-2xl sm:text-3xl md:text-6xl font-extrabold text-gray-800 leading-[1.15] whitespace-pre-line tracking-tight">
-                {slide.title}
-              </h1>
-              <p className="text-gray-500 text-xs sm:text-sm md:text-lg max-w-md leading-relaxed hidden sm:block">{slide.subtitle}</p>
-              <Link
-                to={slide.cta_url}
-                onClick={() => {
-                  if (slide.cta_url.includes('gender=')) {
-                    const gender = slide.cta_url.includes('girls') ? 'girls' : 'boys';
-                    updateFilters({ gender });
-                  }
-                }}
-                className={`inline-flex items-center gap-2 px-4 py-2.5 md:px-7 md:py-3.5 rounded-2xl bg-gradient-to-r from-${slide.accent_from} to-${slide.accent_to} text-white font-bold text-xs md:text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-200`}
-              >
-                {slide.cta_label}
-                <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
-              </Link>
-            </div>
-
-            {/* Hero Image */}
-            <div className="relative w-36 h-36 sm:w-48 sm:h-48 md:w-96 md:h-96 flex-shrink-0">
-              <div className={`absolute inset-0 bg-${slide.decor_bg} rounded-full blur-2xl opacity-60 scale-110`} />
-              <Link to={slide.cta_url}
-                onClick={() => {
-                  if (slide.cta_url.includes('gender=')) {
-                    const gender = slide.cta_url.includes('girls') ? 'girls' : 'boys';
-                    updateFilters({ gender });
-                  }
-                }}
-                className="relative w-full h-full drop-shadow-2xl flex items-center justify-center cursor-pointer"
-                style={{ animation: 'heroFloat 3s ease-in-out infinite' }}>
-                {slide.image ? (
-                  <img 
-                    src={slide.image} 
-                    alt={slide.title} 
-                    className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-2xl" 
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=80";
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10" style={{ paddingTop: '20px', paddingBottom: '28px' }}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px' }}>
+                {/* Text */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px', minWidth: 0 }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    padding: '4px 12px', borderRadius: '100px', fontSize: '10px',
+                    fontWeight: '700', color: '#fff', background: theme.accent,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)', alignSelf: 'flex-start',
+                    fontFamily: 'Outfit, sans-serif',
+                  }}>
+                    {slide.tag}
+                  </span>
+                  <h1 style={{
+                    fontSize: 'clamp(20px, 5vw, 56px)',
+                    fontWeight: '900', color: '#1F2937',
+                    lineHeight: 1.15, letterSpacing: '-0.5px',
+                    fontFamily: 'Outfit, sans-serif', margin: 0,
+                    wordBreak: 'normal', overflowWrap: 'normal',
+                  }}>
+                    {slide.title?.replace(/\\n|\n/g, ' ')}
+                  </h1>
+                  <p className="hidden sm:block" style={{ color: '#6B7280', fontSize: '13px', lineHeight: 1.5, margin: 0 }}>
+                    {slide.subtitle}
+                  </p>
+                  <Link
+                    to={slide.cta_url}
+                    onClick={() => {
+                      if (slide.cta_url?.includes('gender=')) {
+                        const gender = slide.cta_url.includes('girls') ? 'girls' : 'boys';
+                        updateFilters({ gender });
+                      }
                     }}
-                  />
-                ) : (
-                  <div className="w-full h-full border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center text-gray-400 text-xs">No Image</div>
-                )}
-              </Link>
-            </div>
-          </div>
-        </div>
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                      padding: '9px 18px', borderRadius: '14px',
+                      background: theme.accent, color: '#fff',
+                      fontWeight: '700', fontSize: '12px',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
+                      textDecoration: 'none', fontFamily: 'Outfit, sans-serif',
+                      alignSelf: 'flex-start', transition: 'transform 0.2s, box-shadow 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.2)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.15)'; }}
+                  >
+                    {slide.cta_label}
+                    <ChevronRight size={14} />
+                  </Link>
+                </div>
 
-        {/* Slide Controls */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-          <button onClick={() => goToSlide((heroSlide - 1 + heroSlides.length) % heroSlides.length)}
-            className="w-6 h-6 rounded-full bg-white/60 hover:bg-white/90 flex items-center justify-center transition-colors">
-            <ChevronLeft className="w-3 h-3 text-gray-600" />
-          </button>
-          {heroSlides.map((_, i) => (
-            <button key={i} onClick={() => goToSlide(i)}
-              className={`rounded-full transition-all duration-300 ${i === heroSlide ? 'w-7 h-2.5 bg-gray-700' : 'w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400'}`} />
-          ))}
-          <button onClick={() => goToSlide((heroSlide + 1) % heroSlides.length)}
-            className="w-6 h-6 rounded-full bg-white/60 hover:bg-white/90 flex items-center justify-center transition-colors">
-            <ChevronRight className="w-3 h-3 text-gray-600" />
-          </button>
-        </div>
-      </section>
+                {/* Hero Image */}
+                <div style={{ position: 'relative', width: 'clamp(120px,38vw,380px)', height: 'clamp(120px,38vw,380px)', flexShrink: 0 }}>
+                  <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: theme.decor, filter: 'blur(30px)', transform: 'scale(1.1)' }} />
+                  <Link to={slide.cta_url}
+                    onClick={() => {
+                      if (slide.cta_url?.includes('gender=')) {
+                        const gender = slide.cta_url.includes('girls') ? 'girls' : 'boys';
+                        updateFilters({ gender });
+                      }
+                    }}
+                    style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'heroFloat 3s ease-in-out infinite', cursor: 'pointer' }}>
+                    {slide.image ? (
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '16px', filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.15))' }}
+                        onError={e => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=800&q=80'; }}
+                      />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', border: '2px dashed #D1D5DB', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9CA3AF', fontSize: '11px' }}>No Image</div>
+                    )}
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', paddingBottom: '16px' }}>
+              <button onClick={() => goToSlide((heroSlide - 1 + heroSlides.length) % heroSlides.length)}
+                style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.7)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ChevronLeft className="w-3 h-3 text-gray-600" />
+              </button>
+              {heroSlides.map((_, i) => (
+                <button key={i} onClick={() => goToSlide(i)} style={{
+                  borderRadius: '100px', border: 'none', cursor: 'pointer', transition: 'all 0.3s',
+                  width: i === heroSlide ? '28px' : '10px', height: '10px',
+                  background: i === heroSlide ? '#374151' : '#D1D5DB',
+                }} />
+              ))}
+              <button onClick={() => goToSlide((heroSlide + 1) % heroSlides.length)}
+                style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.7)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ChevronRight className="w-3 h-3 text-gray-600" />
+              </button>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ── Quick Category Strip ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
