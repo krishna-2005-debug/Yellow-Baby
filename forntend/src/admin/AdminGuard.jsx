@@ -11,9 +11,9 @@ export default function AdminGuard({ children }) {
     </div>
   );
 
-  // Temporarily allow access even without auth for preview
-  // To enable auth protection, uncomment the next line:
-  // if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   return children;
 }
