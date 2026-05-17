@@ -40,6 +40,36 @@
     --s3:  0 10px 20px -4px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.04);
   }
 
+  /* ── DISABLE DJANGO DARK MODE ── */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --body-bg: var(--bg) !important;
+      --body-fg: var(--tx) !important;
+      --body-quiet-color: var(--tm) !important;
+      --header-bg: var(--hd) !important;
+      --header-color: #fff !important;
+      --breadcrumbs-bg: var(--sf) !important;
+      --breadcrumbs-fg: var(--ts) !important;
+      --breadcrumbs-link-fg: var(--pd) !important;
+      --primary: var(--p) !important;
+      --secondary: var(--pd) !important;
+      --link-fg: var(--p) !important;
+      --link-hover-color: var(--pd) !important;
+      --darkened-bg: var(--sh) !important;
+      --selected-bg: var(--pl) !important;
+      --selected-row: var(--pl) !important;
+      --border-color: var(--bd) !important;
+    }
+  }
+
+  html[data-theme="dark"] { color-scheme: light !important; }
+  tbody tr { background: #fff !important; color: var(--tx) !important; }
+  tbody tr:nth-child(even) { background: var(--sh) !important; }
+  tbody td, tbody th { background: transparent !important; }
+  .module { background: var(--sf) !important; }
+  .panel { background: #fff !important; color: var(--tx) !important; }
+  .panel table tr { background: transparent !important; }
+
   *,*::before,*::after{box-sizing:border-box;}
 
   body {
