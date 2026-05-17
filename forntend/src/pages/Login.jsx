@@ -5,12 +5,6 @@ import { sendOtp, verifyOtp } from '../api/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
-const FEATURES = [
-  { icon: '🛡️', text: 'Secure OTP Login' },
-  { icon: '🚀', text: 'Fast Checkout' },
-  { icon: '📦', text: 'Track Orders' },
-  { icon: '❤️', text: 'Save Wishlist' },
-];
 
 export default function Login() {
   const { login } = useAuth();
@@ -268,21 +262,6 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Feature pills below card */}
-        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '20px' }}>
-          {FEATURES.map(({ icon, text }) => (
-            <div key={text} style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '6px 14px', borderRadius: '100px',
-              background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(251,191,36,0.2)',
-              fontSize: '12px', fontWeight: '600', color: '#374151',
-              fontFamily: 'Outfit, sans-serif',
-            }}>
-              <span>{icon}</span> {text}
-            </div>
-          ))}
-        </div>
       </div>
 
       <style>{`
