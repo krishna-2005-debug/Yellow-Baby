@@ -3,6 +3,8 @@
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import re_path
+from django.views.static import serve
 
 # ── Custom Admin Site ──────────────────────────────────────────────────────────
 from django.contrib.auth import views as auth_views
@@ -27,4 +29,11 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/content/', include('content.urls')),
     path('health/', health),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Explicitly serve media files in production (since S3 is not used yet)
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
+]
