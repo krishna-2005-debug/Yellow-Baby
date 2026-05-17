@@ -37,20 +37,21 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
 
           {/* Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
             <div style={{
-              width: '48px', height: '48px', borderRadius: '14px',
+              width: '38px', height: '38px', borderRadius: '11px',
               background: '#fff',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 4px 14px rgba(251,191,36,0.5)',
               transition: 'transform 0.2s',
+              flexShrink: 0,
             }}
               onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
               onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
-              <img src="/logo.png" alt="Yellow Baby" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '14px' }} />
+              <img src="/logo.png" alt="Yellow Baby" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '11px' }} />
             </div>
-            <span style={{ fontSize: '24px', fontWeight: '800', color: '#4E3728', letterSpacing: '-0.3px', fontFamily: 'Outfit, sans-serif' }}>
+            <span style={{ fontSize: '20px', fontWeight: '800', color: '#4E3728', letterSpacing: '-0.3px', fontFamily: 'Outfit, sans-serif', whiteSpace: 'nowrap' }}>
               Yellow <span style={{ color: '#F59E0B' }}>Baby</span>
             </span>
           </Link>
@@ -63,7 +64,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
 
             {/* Cart */}
             <Link to="/cart" id="navbar-cart-btn" style={{
