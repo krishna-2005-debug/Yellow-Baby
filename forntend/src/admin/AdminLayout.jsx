@@ -131,7 +131,7 @@ export default function AdminLayout() {
             </div>
           </div>
           <div className="adm-topbar-right">
-            <a href="http://localhost:8000/admin/" target="_blank" rel="noreferrer"
+            <a href={`${BASE_URL}/admin/`} target="_blank" rel="noreferrer"
               className="adm-topbar-btn" title="Django Admin">
               <ExternalLink size={16} />
               <span className="adm-topbar-btn-label">Django Admin</span>

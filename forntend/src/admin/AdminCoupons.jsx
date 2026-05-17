@@ -1,4 +1,5 @@
 import { Tag, Plus, ExternalLink } from 'lucide-react';
+import { BASE_URL } from '../api/api';
 
 const DEMO_COUPONS = [
   { code: 'BABY10', discount_type: 'percentage', discount_value: 10, min_order: 500, is_active: true, usage_count: 24, max_usage: 100 },
@@ -14,7 +15,7 @@ export default function AdminCoupons() {
           <h1 className="adm-page-title">Coupons</h1>
           <p className="adm-page-sub">{DEMO_COUPONS.length} coupons configured</p>
         </div>
-        <a href="http://localhost:8000/admin/orders/coupon/add/" target="_blank" rel="noreferrer"
+        <a href={`${BASE_URL}/admin/orders/coupon/add/`} target="_blank" rel="noreferrer"
           className="adm-btn adm-btn-primary">
           <Plus size={14} /> Add Coupon
         </a>
@@ -60,7 +61,7 @@ export default function AdminCoupons() {
                   </span>
                 </td>
                 <td>
-                  <a href={`http://localhost:8000/admin/orders/coupon/`} target="_blank" rel="noreferrer"
+                  <a href={`${BASE_URL}/admin/orders/coupon/`} target="_blank" rel="noreferrer"
                     className="adm-btn adm-btn-ghost" style={{ padding: '5px 10px', fontSize: 11 }}>
                     <ExternalLink size={12} /> Edit
                   </a>

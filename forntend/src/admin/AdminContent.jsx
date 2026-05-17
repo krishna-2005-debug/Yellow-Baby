@@ -1,4 +1,5 @@
 import { Layers, ExternalLink } from 'lucide-react';
+import { BASE_URL } from '../api/api';
 
 export default function AdminContent() {
   const sections = [
@@ -19,7 +20,7 @@ export default function AdminContent() {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 14 }}>
         {sections.map(s => (
-          <a key={s.name} href={`http://localhost:8000${s.url}`} target="_blank" rel="noreferrer"
+          <a key={s.name} href={`${BASE_URL}${s.url}`} target="_blank" rel="noreferrer"
             style={{ textDecoration: 'none' }}>
             <div className="adm-kpi" style={{ cursor: 'pointer' }}>
               <div className="adm-kpi-stripe" style={{ background: '#F59E0B' }} />
@@ -38,7 +39,7 @@ export default function AdminContent() {
         ))}
       </div>
       <div style={{ marginTop: 20 }}>
-        <a href="http://localhost:8000/admin/content/" target="_blank" rel="noreferrer"
+        <a href={`${BASE_URL}/admin/content/`} target="_blank" rel="noreferrer"
           className="adm-btn adm-btn-primary">
           <Layers size={14} /> Open Django Admin Content
         </a>

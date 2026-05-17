@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, Plus, RefreshCw, Package, Edit, Trash2, Eye } from 'lucide-react';
-import api from '../api/api';
+import api, { BASE_URL } from '../api/api';
 import toast from 'react-hot-toast';
 
 const DEMO_PRODUCTS = [
@@ -72,7 +72,7 @@ function ProductRow({ product, onToggle, onDelete }) {
             className="adm-btn adm-btn-ghost" style={{ padding: '5px 8px' }} title="View">
             <Eye size={13} />
           </a>
-          <a href={`http://localhost:8000/admin/products/product/${product.id}/change/`}
+          <a href={`${BASE_URL}/admin/products/product/${product.id}/change/`}
             target="_blank" rel="noreferrer"
             className="adm-btn adm-btn-ghost" style={{ padding: '5px 8px' }} title="Edit">
             <Edit size={13} />
@@ -145,7 +145,7 @@ export default function AdminProducts() {
           <button className="adm-btn adm-btn-ghost" onClick={fetchProducts}>
             <RefreshCw size={14} /> Refresh
           </button>
-          <a href="http://localhost:8000/admin/products/product/add/"
+          <a href={`${BASE_URL}/admin/products/product/add/`}
             target="_blank" rel="noreferrer" className="adm-btn adm-btn-primary">
             <Plus size={14} /> Add Product
           </a>
