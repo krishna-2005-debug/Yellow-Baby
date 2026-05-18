@@ -297,12 +297,23 @@ export default function Home() {
               className="flex-shrink-0 flex flex-col items-center gap-2 px-5 py-3.5 rounded-2xl bg-white border border-gray-100 shadow-sm hover:border-yellow-300 hover:shadow-md hover:scale-105 transition-all duration-200 group"
             >
               {image ? (
-                <img src={image} alt={label} className="w-12 h-12 object-cover rounded-full bg-gray-50 shadow-inner border border-gray-100" />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-500 font-bold border border-yellow-100 shadow-inner text-xs">
-                  {label.slice(0, 2).toUpperCase()}
-                </div>
-              )}
+                <img
+                  src={image}
+                  alt={label}
+                  className="w-12 h-12 object-cover rounded-full bg-gray-50 shadow-inner border border-gray-100"
+                  onError={e => {
+                    e.target.onerror = null;
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div
+                className="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-500 font-bold border border-yellow-100 shadow-inner text-xs"
+                style={{ display: image ? 'none' : 'flex' }}
+              >
+                {label.slice(0, 2).toUpperCase()}
+              </div>
               <span className="text-xs font-semibold text-gray-600 group-hover:text-yellow-600 whitespace-nowrap">{label}</span>
             </button>
           ))}

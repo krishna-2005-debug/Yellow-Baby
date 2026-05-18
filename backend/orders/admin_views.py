@@ -203,8 +203,66 @@ class AdminOrderListView(APIView):
 
 
 class AdminOrderUpdateView(APIView):
-    """PATCH /api/orders/admin/<pk>/ — Update order status."""
+    """
+    GET  /api/orders/admin/<pk>/ — Full order detail for admin panel.
+    PATCH /api/orders/admin/<pk>/ — Update order status.
+    """
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        err = _require_staff(request)
+        if err:
+            return err
+
+        order = Order.objects.select_related('user', 'coupon').prefetch_related(
+            'items__product_variant__product__images'
+        ).filter(pk=pk).first()
+        if not order:
+            return Response({'message': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        items = []
+        for item in order.items.all():
+            pv = item.product_variant
+            product = pv.product
+            images = list(product.images.all())
+            primary = next((i for i in images if i.is_primary), None) or (images[0] if images else None)
+            try:
+                image_url = request.build_absolute_uri(primary.image.url) if primary and primary.image else None
+            except Exception:
+                image_url = None
+            items.append({
+                'id':           item.id,
+                'product_name': product.name,
+                'size':         pv.size,
+                'quantity':     item.quantity,
+                'unit_price':   float(item.unit_price),
+                'subtotal':     float(item.unit_price * item.quantity),
+                'image':        image_url,
+            })
+
+        addr = order.address_snapshot or {}
+        return Response({
+            'id':              order.id,
+            'status':          order.status,
+            'payment_method':  order.payment_method,
+            'payment_status':  order.payment_status,
+            'subtotal':        float(order.subtotal),
+            'discount_amount': float(order.discount_amount),
+            'total_amount':    float(order.total_amount),
+            'coupon_code':     order.coupon.code if order.coupon else None,
+            'created_at':      order.created_at.isoformat(),
+            'user_mobile':     order.user.mobile,
+            'user_name':       order.user.name or '',
+            'address': {
+                'name':         addr.get('name', ''),
+                'phone':        addr.get('phone', ''),
+                'address_line': addr.get('address_line', ''),
+                'city':         addr.get('city', ''),
+                'state':        addr.get('state', ''),
+                'pincode':      addr.get('pincode', ''),
+            },
+            'items': items,
+        })
 
     def patch(self, request, pk):
         err = _require_staff(request)
