@@ -93,7 +93,7 @@ export default function Checkout() {
         coupon_code: couponCode || undefined,
       });
       await emptyCart();
-      navigate('/order-success', { state: { order: data } });
+      navigate('/order-success', { state: { order: data.order ?? data } });
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to place order';
       toast.error(msg);

@@ -92,13 +92,12 @@ export default function AdminLayout() {
             {sidebarOpen && <span className="adm-nav-label">View Store</span>}
             {sidebarOpen && <ExternalLink size={11} className="adm-nav-arrow" />}
           </a>
-          <NavLink to="/admin-panel/settings"
-            className={({ isActive }) => `adm-nav-link ${isActive ? 'active' : ''}`}
-            title={!sidebarOpen ? 'Settings' : undefined}>
+          <a href={`${BASE_URL}/admin/`} target="_blank" rel="noreferrer"
+            className="adm-nav-link" title={!sidebarOpen ? 'Django Admin Settings' : undefined}>
             <Settings size={18} className="adm-nav-icon" />
-            {sidebarOpen && <span className="adm-nav-label">Settings</span>}
+            {sidebarOpen && <span className="adm-nav-label">Django Admin</span>}
             {sidebarOpen && <ChevronRight size={12} className="adm-nav-arrow" />}
-          </NavLink>
+          </a>
         </nav>
 
         {/* User info at bottom */}

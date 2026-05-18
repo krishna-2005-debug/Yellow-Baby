@@ -65,14 +65,17 @@ export default function OrderSuccess() {
                   <span>{order.payment_method === 'cod' ? 'Cash on Delivery' : order.payment_method.toUpperCase()}</span>
                 </div>
               )}
-              {order.address && (
-                <div className="flex items-start gap-2 text-sm text-gray-500">
-                  <MapPin className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                  <span>
-                    {order.address.full_name}, {order.address.address_line1}, {order.address.city} – {order.address.pincode}
-                  </span>
-                </div>
-              )}
+              {(order.address || order.address_snapshot) && (() => {
+                const addr = order.address_snapshot || order.address;
+                return (
+                  <div className="flex items-start gap-2 text-sm text-gray-500">
+                    <MapPin className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                    <span>
+                      {addr.name || addr.full_name}, {addr.address_line || addr.address_line1}, {addr.city} – {addr.pincode}
+                    </span>
+                  </div>
+                );
+              })()}
               {order.status && (
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />

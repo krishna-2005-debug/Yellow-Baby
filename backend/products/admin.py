@@ -28,6 +28,7 @@ class ProductVariantInline(TabularInline):
     stock_indicator.short_description = 'Stock Status'
 
 
+
 class ProductImageInline(TabularInline):
     model = ProductImage
     extra = 1
@@ -131,7 +132,7 @@ class ProductAdmin(ModelAdmin):
         low_stock = len([v for v in variants if 0 < v.stock < 5])
 
         if total == 0:
-            return format_html('<span style="color:#DC143C;font-weight:700;">✗ Out of stock</span>')
+            return mark_safe('<span style="color:#DC143C;font-weight:700;">✗ Out of stock</span>')
         elif low_stock > 0:
             return format_html(
                 '<span style="color:#FFA500;font-weight:700;" title="{} variant(s) low">⚠ {} ({} low)</span>',
