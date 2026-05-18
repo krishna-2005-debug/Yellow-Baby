@@ -37,11 +37,16 @@ class ProductImageInline(TabularInline):
 
     def image_preview(self, obj):
         if obj and obj.image:
-            return format_html(
-                '<img src="{}" width="70" height="70" style="object-fit:cover;border-radius:6px;'
-                'border:2px solid #fde0d0;" />',
-                obj.image.url,
-            )
+            try:
+                url = obj.image.url
+                return format_html(
+                    '<img src="{}" width="70" height="70" '
+                    'style="object-fit:cover;border-radius:6px;border:2px solid #fde0d0;" '
+                    'onerror="this.style.opacity=0" />',
+                    url,
+                )
+            except Exception:
+                pass
         return '—'
     image_preview.short_description = 'Preview'
 
@@ -102,12 +107,19 @@ class ProductAdmin(ModelAdmin):
     def thumbnail(self, obj):
         images = list(obj.images.all())
         img = next((i for i in images if i.is_primary), None) or (images[0] if images else None)
-        if img:
-            return format_html(
-                '<img src="{}" width="52" height="52" style="object-fit:cover;border-radius:8px;'
-                'border:2px solid #fde0d0;box-shadow:0 1px 4px rgba(0,0,0,0.1);" />',
-                img.image.url,
-            )
+        if img and img.image:
+            try:
+                url = img.image.url
+                return format_html(
+                    '<img src="{}" width="52" height="52" '
+                    'style="object-fit:cover;border-radius:8px;border:2px solid #fde0d0;box-shadow:0 1px 4px rgba(0,0,0,0.1);" '
+                    'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" />'
+                    '<div style="display:none;width:52px;height:52px;background:#fde0d0;border-radius:8px;'
+                    'align-items:center;justify-content:center;font-size:20px;">&#128085;</div>',
+                    url,
+                )
+            except Exception:
+                pass
         return mark_safe(
             '<div style="width:52px;height:52px;background:#fde0d0;border-radius:8px;'
             'display:flex;align-items:center;justify-content:center;font-size:20px;">&#128085;</div>'
